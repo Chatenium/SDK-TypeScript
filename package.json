@@ -1,0 +1,20 @@
+{
+  "name": "chatenium-sdk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.3",
+    "vitest": "^4.1.2"
+  },
+  "private": true,
+  "dependencies": {
+    "axios": "^1.14.0",
+    "msw": "^2.12.14"
+  }
+}

@@ -1,0 +1,21 @@
+import {KeyringAPI} from "../../storage/keyring";
+
+export class KeyringMock implements KeyringAPI {
+    ring: { [key: string]: string } = {};
+
+    set(key: string, value: any) {
+        this.ring[key] = value;
+    }
+
+    get(key: string): string {
+        return this.ring[key];
+    }
+
+    delete(key: string) {
+        delete this.ring[key];
+    }
+
+    flush() {
+        this.ring = {};
+    }
+}
