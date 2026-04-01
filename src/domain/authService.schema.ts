@@ -1,11 +1,24 @@
 // Request schemas
-export interface OtpPleSendCodeReq {
-    unameMailPhone: string;
+export interface PleSendCodeReq {
+    phoneMail: string;
     type: number;
 }
 
-export interface OtpPleVerifyCodeReq {
-    unameMailPhone: string;
+export interface OtpSendCodeReq {
+    usernamePhoneMail: string;
+    type: number;
+}
+
+export interface PleVerifyCodeReq {
+    phoneMail: string;
+    type: number;
+    code: number;
+    os: string | null;
+    language: string | null;
+}
+
+export interface OtpVerifyCodeReq {
+    usernamePhoneMail: string;
     type: number;
     code: number;
     os: string | null;
@@ -77,6 +90,10 @@ export interface SignInSuccessResp {
     displayName: string;
     pfp: string;
     userid: string;
+}
+
+export interface OtpPleCodeSendTestingResp {
+    code: number | null;
 }
 
 // Types
