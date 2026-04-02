@@ -8,7 +8,7 @@ import {
 } from "../../domain/authService.schema";
 import {GenericSuccessBody} from "../../domain/http.schema";
 
-export const authHandlers = [
+export const networkHandlers = [
     http.get('*/user/authOptions', () => {
         return HttpResponse.json(<AuthMethods>{
             email: true,

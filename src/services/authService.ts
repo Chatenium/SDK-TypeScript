@@ -164,6 +164,7 @@ export class AuthService {
             });
             return resp.data.authCode
         } catch (e) {
+            console.log(e)
             if (isAxiosError<GenericErrorBody>(e)) {
                 throw e;
             }

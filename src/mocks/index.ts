@@ -1,5 +1,7 @@
-import {authHandlers} from "./handlers/auth.http";
+import {networkHandlers} from "./handlers/auth.http";
+import {authHandlers} from "./handlers/network.http";
 
 export const allHandlers = [
-    ...authHandlers
+    ...authHandlers,
+    ...networkHandlers
 ]

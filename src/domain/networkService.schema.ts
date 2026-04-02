@@ -1,5 +1,5 @@
 // Request schemas
-import {RGB, TimeStamp} from "./common.schema";
+import {PublicUserData, RGB, TimeStamp} from "./common.schema";
 
 export interface GetInvitesReq {
     networkId: string
@@ -166,6 +166,13 @@ export interface EditRankReq {
     rankId: string
 }
 
+export interface DeleteChannelReq {
+    userid: string
+    categoryId: string
+    networkId: string
+    channelId: string
+}
+
 export interface DeleteRankReq {
     userid: string
     networkId: string
@@ -195,7 +202,7 @@ export interface AssignRankToMemberReq {
     networkId: string
 }
 
-export interface GetMemberReq {
+export interface GetMembersReq {
     userid: string
     networkId: string
 }
@@ -350,6 +357,14 @@ export interface NetworkDiscovery {
     networkId: string
 }
 
+export interface DetailedMemberList {
+    rankId: string
+    name: string
+    color: RGB
+    icon: string
+    members: PublicUserData[]
+}
+
 // WebSocket payloads
 export interface WSCategoryDeletedPayload {
     categoryId: string
@@ -448,4 +463,29 @@ export interface WSNewNamePayload {
 export interface WSNewChannelPayload {
     in: string
     channel: NetworkChannel
+}
+
+// Constants
+export const NetworkPermissions = {
+    createAndEditCategories: 2,
+    deleteCategories: 4,
+    createAndEditChannels: 8,
+    deleteChannels: 16,
+    deleteAnyMessage: 32,
+    pinMessages: 64,
+    createAndEditRanks: 128,
+    deleteRanks: 256,
+    changeNetworkNamePictureAndVisibility: 512,
+    createEmojis: 1024,
+    deleteEmojis: 2048,
+    manageEmbed: 4096,
+    createWebhooks: 8192,
+    deleteWebhooks: 16384,
+    createInvites: 32768,
+    deleteInvites: 65536,
+    sendMessages: 131072,
+    seeChannels: 262144,
+    banMembers: 524288,
+    kickMembers: 1048576,
+    unAndAssignRanksToMember: 2097152,
 }
