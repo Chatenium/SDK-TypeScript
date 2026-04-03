@@ -30,7 +30,7 @@ export class NetworkService {
         this.userid = userid;
         this.networkId = networkId;
         this.database = database;
-        this.client = (httpClientOverwrite ?? getClient()).create({
+        this.client = (httpClientOverwrite ?? getClient(false)).create({
             headers: {
                 "Authorization": token
             }

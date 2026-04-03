@@ -1,9 +1,11 @@
 export interface SDKConfig {
     apiUrl: string;
+    cdnUrl: string;
 }
 
 const DefaultEnvironment: SDKConfig = {
-    apiUrl: "https://api.chatenium.hu"
+    apiUrl: "https://api.chatenium.hu",
+    cdnUrl: "https://cdn.chatenium.hu",
 }
 
 let currentConfig = {...DefaultEnvironment}

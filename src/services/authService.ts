@@ -17,7 +17,7 @@ export class AuthService {
      */
     async getAuthMethods(unameMailPhone: string): Promise<AuthMethods> {
         try {
-            const resp = await getClient().get<AuthMethods>(`user/authOptions?unameMailPhone=${unameMailPhone}`);
+            const resp = await getClient(false).get<AuthMethods>(`user/authOptions?unameMailPhone=${unameMailPhone}`);
             return resp.data
         } catch (e) {
             if (isAxiosError<GenericErrorBody>(e)) {
@@ -35,7 +35,7 @@ export class AuthService {
      */
     async otpSendCode(unameMailPhone: string, type: number): Promise<void|number> {
         try {
-            const resp = await getClient().post<OtpPleCodeSendTestingResp>("v2/user/otpSendCode", <OtpSendCodeReq>{
+            const resp = await getClient(false).post<OtpPleCodeSendTestingResp>("v2/user/otpSendCode", <OtpSendCodeReq>{
                 usernamePhoneMail: unameMailPhone,
                 type: type
             });
@@ -60,7 +60,7 @@ export class AuthService {
      */
     async otpVerifyCode(unameMailPhone: string, type: number, code: number): Promise<SignInSuccessResp> {
         try {
-            const resp = await getClient().post<SignInSuccessResp>("v2/user/otpVerifyCode", <OtpVerifyCodeReq>{
+            const resp = await getClient(false).post<SignInSuccessResp>("v2/user/otpVerifyCode", <OtpVerifyCodeReq>{
                 usernamePhoneMail: unameMailPhone,
                 type: type,
                 code: code
@@ -81,7 +81,7 @@ export class AuthService {
      */
     async loginPasswordAuth(usernamePhoneMail: string, password: string): Promise<SignInSuccessResp> {
         try {
-            const resp = await getClient().post<SignInSuccessResp>("v2/user/loginPasswordAuth", <LoginPasswordAuthReq>{
+            const resp = await getClient(false).post<SignInSuccessResp>("v2/user/loginPasswordAuth", <LoginPasswordAuthReq>{
                 unameMailPhone: usernamePhoneMail,
                 password: password
             });
@@ -99,7 +99,7 @@ export class AuthService {
      */
     async isUsernameUsed(username: string): Promise<Boolean> {
         try {
-            const resp = await getClient().get<UserDataValidationResp>(`v2/user/unameUsage?username=${username}`);
+            const resp = await getClient(false).get<UserDataValidationResp>(`v2/user/unameUsage?username=${username}`);
             return resp.data.used
         } catch (e) {
             if (isAxiosError<GenericErrorBody>(e)) {
@@ -114,7 +114,7 @@ export class AuthService {
      */
     async isEmailUsed(email: string): Promise<Boolean> {
         try {
-            const resp = await getClient().get<UserDataValidationResp>(`v2/user/emailUsage?email=${email}`);
+            const resp = await getClient(false).get<UserDataValidationResp>(`v2/user/emailUsage?email=${email}`);
             return resp.data.used
         } catch (e) {
             if (isAxiosError<GenericErrorBody>(e)) {
@@ -132,7 +132,7 @@ export class AuthService {
      */
     async pleSendVCode(phoneMail: string, type: number): Promise<void|number> {
         try {
-            const resp = await getClient().post<OtpPleCodeSendTestingResp>("v2/user/pleSendVCode", <PleSendCodeReq>{
+            const resp = await getClient(false).post<OtpPleCodeSendTestingResp>("v2/user/pleSendVCode", <PleSendCodeReq>{
                 phoneMail: phoneMail,
                 type: type,
             });
@@ -157,7 +157,7 @@ export class AuthService {
      */
     async pleVerifyCode(phoneMail: string, type: number, code: number): Promise<string> {
         try {
-            const resp = await getClient().post<PleVerifyCodeResp>("v2/user/pleVerifyCode", <PleVerifyCodeReq>{
+            const resp = await getClient(false).post<PleVerifyCodeResp>("v2/user/pleVerifyCode", <PleVerifyCodeReq>{
                 phoneMail: phoneMail,
                 type: type,
                 code: code
@@ -181,7 +181,7 @@ export class AuthService {
      */
     async finishPLEAccount(phoneMail: string, authCode: string, username: string, displayName: string|null): Promise<SignInSuccessResp> {
         try {
-            const resp = await getClient().post<SignInSuccessResp>("v2/user/finishPLEAccount", <FinishPleAccountReq>{
+            const resp = await getClient(false).post<SignInSuccessResp>("v2/user/finishPLEAccount", <FinishPleAccountReq>{
                 phoneMail: phoneMail,
                 authCode: authCode,
                 displayName: displayName,
@@ -202,7 +202,7 @@ export class AuthService {
      */
     async loginWithGoogle(code: string): Promise<SignInSuccessResp> {
         try {
-            const resp = await getClient().post<SignInSuccessResp>("user/loginWithGoogle", <LoginWithGoogleReq>{
+            const resp = await getClient(false).post<SignInSuccessResp>("user/loginWithGoogle", <LoginWithGoogleReq>{
                 code: code
             });
             return resp.data
@@ -220,7 +220,7 @@ export class AuthService {
      */
     async loginWithApple(code: string): Promise<SignInSuccessResp> {
         try {
-            const resp = await getClient().post<SignInSuccessResp>("user/loginWithGoogle", <LoginWithApple>{
+            const resp = await getClient(false).post<SignInSuccessResp>("user/loginWithGoogle", <LoginWithApple>{
                 code: code,
                 isApple: false,
             });
@@ -241,7 +241,7 @@ export class AuthService {
      */
     async register(username: string, password: string, displayName: string|null): Promise<SignInSuccessResp> {
         try {
-            const resp = await getClient().post<SignInSuccessResp>("v2/user/register", <RegisterReq>{
+            const resp = await getClient(false).post<SignInSuccessResp>("v2/user/register", <RegisterReq>{
                 username: username,
                 displayName: displayName,
                 password: password,
@@ -263,7 +263,7 @@ export class AuthService {
      */
     async resetPassword(unameMailPhone: string): Promise<void|number> {
         try {
-            const resp = await getClient().post<OtpPleCodeSendTestingResp>("user/resetPassword", <ResetPasswordReq>{
+            const resp = await getClient(false).post<OtpPleCodeSendTestingResp>("user/resetPassword", <ResetPasswordReq>{
                 unameMailPhone: unameMailPhone,
             });
             if (resp.data.code != null) {
@@ -287,7 +287,7 @@ export class AuthService {
      */
     async verifyPasswordReset(unameMailPhone: string, code: number, newPassword: string): Promise<void> {
         try {
-            await getClient().post<GenericSuccessBody>("user/verifyResetCode", <VerifyPasswordResetReq>{
+            await getClient(false).post<GenericSuccessBody>("user/verifyResetCode", <VerifyPasswordResetReq>{
                 unameMailPhone: unameMailPhone,
                 vCode: code,
                 newPassword: newPassword,

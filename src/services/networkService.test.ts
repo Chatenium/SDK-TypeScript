@@ -6,7 +6,7 @@ import {getClient} from "../core/http";
 import {environment, SDKConfig} from "../core/environment";
 
 describe("NetworkService", () => {
-    const service = new NetworkService("", "", "", new DatabaseMock(), getClient())
+    const service = new NetworkService("", "", "", new DatabaseMock(), getClient(false))
 
     it('should get invites', async () => {
         const invites = await service.getInvites();
