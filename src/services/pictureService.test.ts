@@ -25,6 +25,6 @@ describe("PictureService", () => {
 
     it('should fetch comments', async () => {
         const comments = await service.getComments("")
-        expect(comments[0]).toBe("This is a comment")
+        expect(comments[0].comment).toBe("This is a comment")
     })
 })
