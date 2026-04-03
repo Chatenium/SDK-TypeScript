@@ -4,7 +4,7 @@ import {getClient} from "../core/http";
 import {NetworkInvite} from "../domain/networkService.schema";
 import {GenericErrorBody} from "../domain/http.schema";
 import {
-    Album, ChangePictureVisibilityReq,
+    Album, ChangePictureVisibilityReq, Comment,
     CreateAlbumReq,
     DeleteImageReq,
     DiscoveryResp, EditPictureTitleReq,
@@ -36,6 +36,9 @@ export class PictureService {
         })
     }
 
+    /**
+     * Fetches all images uploaded by the specified uploader categorized in albums
+     */
     async get(): Promise<GetResp> {
         try {
             const resp = await this.client.get<GetResp>(`picture/pictures?userid=${this.userid}&target=${this.uploaderId}`);
@@ -49,6 +52,9 @@ export class PictureService {
         }
     }
 
+    /**
+     * Fetches the top 10 most liked and newest pictures
+     */
     async discovery(): Promise<DiscoveryResp> {
         try {
             const resp = await this.client.get<DiscoveryResp>("picture/discovery");
@@ -62,6 +68,10 @@ export class PictureService {
         }
     }
 
+    /**
+     * Creates a new album
+     * @param name Provided by the user
+     */
     async createAlbum(name: string): Promise<Album> {
         try {
             const resp = await this.client.post<Album>("picture/createAlbum", <CreateAlbumReq>{
@@ -78,6 +88,10 @@ export class PictureService {
         }
     }
 
+    /**
+     * Registers all uploaded pictures in the database
+     * @param uploadId Must the be the one that was used when uploading the images
+     */
     async finalizeUpload(uploadId: string): Promise<void> {
         try {
             await this.client.post("picture/finalizeUpload", <FinalizeUploadReq>{
@@ -94,9 +108,13 @@ export class PictureService {
         }
     }
 
+    /**
+     * Deletes the specified picture
+     * @param imageId
+     */
     async deletePicture(imageId: string): Promise<void> {
         try {
-            await this.client.post("picture/delete", <DeleteImageReq>{
+            await this.client.patch("picture/delete", <DeleteImageReq>{
                 userid: this.userid,
                 imageId: imageId
             });
@@ -110,11 +128,18 @@ export class PictureService {
         }
     }
 
+
+    /**
+     * Changes the visibility of the specified picture
+     * @param imageId
+     * @param newVisibility
+     */
     async changeVisibility(imageId: string, newVisibility: string): Promise<void> {
         try {
-            await this.client.post("picture/changeVisibility", <ChangePictureVisibilityReq>{
+            await this.client.patch("picture/changeVisibility", <ChangePictureVisibilityReq>{
                 userid: this.userid,
-                visibility: newVisibility
+                visibility: newVisibility,
+                imageId: imageId
             });
             return
         } catch (e) {
@@ -126,11 +151,17 @@ export class PictureService {
         }
     }
 
+    /**
+     * Edits the title of the specified picture
+     * @param imageId
+     * @param newTitle
+     */
     async editTitle(imageId: string, newTitle: string): Promise<void> {
         try {
-            await this.client.post("picture/editTitle", <EditPictureTitleReq>{
+            await this.client.patch("picture/editTitle", <EditPictureTitleReq>{
                 userid: this.userid,
-                title: newTitle
+                title: newTitle,
+                imageId: imageId
             });
             return
         } catch (e) {
@@ -142,6 +173,10 @@ export class PictureService {
         }
     }
 
+    /**
+     * (un)likes the specified picture
+     * @param imageId
+     */
     async toggleLike(imageId: string): Promise<void> {
         try {
             await this.client.post("picture/toggleLike", <TogglePictureLikeReq>{
@@ -158,6 +193,11 @@ export class PictureService {
         }
     }
 
+    /**
+     * Posts a comment under the specified picture
+     * @param imageId
+     * @param comment
+     */
     async postComment(imageId: string, comment: string): Promise<void> {
         try {
             await this.client.post("picture/comment", <PostCommentReq>{
@@ -175,6 +215,9 @@ export class PictureService {
         }
     }
 
+    /**
+     * (un)follows the uploader
+     */
     async toggleFollow(): Promise<void> {
         try {
             await this.client.post("picture/toggleFollow", <ToggleFollowReq>{
@@ -191,6 +234,9 @@ export class PictureService {
         }
     }
 
+    /**
+     * Fetches all albums
+     */
     async getAlbums(): Promise<Album[]> {
         try {
             const resp = await this.client.get(`picture/getAlbums?userid=${this.userid}`);
@@ -204,9 +250,13 @@ export class PictureService {
         }
     }
 
-    async getComments(imageId: string): Promise<Album[]> {
+    /**
+     * Gets all comments under the specified picture
+     * @param imageId
+     */
+    async getComments(imageId: string): Promise<Comment[]> {
         try {
-            const resp = await this.client.get(`picture/comment?userid=${this.userid}&imageId=${imageId}`);
+            const resp = await this.client.get<Comment[]>(`picture/comment?userid=${this.userid}&imageId=${imageId}`);
             return resp.data
         } catch (e) {
             console.log(e)
@@ -217,6 +267,15 @@ export class PictureService {
         }
     }
 
+    /**
+     * Uploads a new picture to the CDN
+     * @param picture
+     * @param title
+     * @param visibility
+     * @param album
+     * @param uploadId
+     * @param name
+     */
     async uploadPicture(picture: string, title: string, visibility: string, album: string, uploadId: string, name: string): Promise<void> {
         try {
             await this.cdnClient.post("picture/upload", <UploadImageReq>{

@@ -96,3 +96,14 @@ export interface Image {
     likes: number
     userData: PublicUserData | null
 }
+
+export interface Comment {
+    commentId: string
+    author: string
+    imageId: string
+    comment: string
+    commented_at: TimeStamp
+    username: string
+    pfp: string
+    displayName: string
+}
