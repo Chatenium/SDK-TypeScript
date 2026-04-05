@@ -23,7 +23,7 @@ const getEnv = (key: string): string | undefined => {
 const DefaultEnvironment: SDKConfig = {
     apiUrl: getEnv('API_URL') ?? "https://api.chatenium.hu",
     cdnUrl: getEnv('CDN_URL') ?? "https://cdn.chatenium.hu",
-    cdnUrl: getEnv('WS_URL') ?? "wss://api.chatenium.hu",
+    wsUrl: getEnv('WS_URL') ?? "wss://api.chatenium.hu",
 };
 
 let currentConfig: SDKConfig = { ...DefaultEnvironment };
