@@ -45,6 +45,7 @@ export class WebSocketHandler {
             this.startListening()
             return
         } catch (e) {
+            console.log(e)
             if (isAxiosError<GenericErrorBody>(e)) {
                 throw e;
             }
