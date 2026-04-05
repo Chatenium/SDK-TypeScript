@@ -44,10 +44,12 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Create .env file
+        run: |
+          echo "API_URL=http://api:3000" >> .env
+          echo "CDN_URL=http://cdn:4000" >> .env
+
       - name: Run Vitest
         run: |
           npm install
           npm test
-        env:
-          API_URL: http://api:3000
-          CDN_URL: http://cdn:4000
