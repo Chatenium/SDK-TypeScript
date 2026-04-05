@@ -18,7 +18,6 @@ const NETWORK_SERVICE_TESTING_INVITE_ID = "444444444444444444444444"
 const NETWORK_SERVICE_TESTING_TOKEN = "testingToken"
 
 describe("NetworkService Integration Testing", () => {
-    environment.overwrite(<SDKConfig>{apiUrl: "http://localhost:3000"})
     const service = new NetworkService(
         NETWORK_SERVICE_TESTING_USER_ID,
         NETWORK_SERVICE_TESTING_TOKEN,

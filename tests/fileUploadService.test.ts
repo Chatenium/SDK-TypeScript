@@ -10,7 +10,6 @@ describe("FileUploadService Integration Testing", () => {
     const FILE_UPL_SERVICE_TESTING_CHAT_ID = "000000000000000000000000"
     const FILE_UPL_SERVICE_TESTING_TOKEN = "testingToken"
 
-    environment.overwrite(<SDKConfig>{apiUrl: "http://localhost:3000", cdnUrl: "http://localhost:4000"})
     it('should upload all files', async () => {
         const response = await axios.get("https://picsum.photos/500", {
             responseType: 'blob'

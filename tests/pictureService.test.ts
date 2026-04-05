@@ -11,7 +11,6 @@ const PICTURE_SERVICE_TESTING_USER_ID = "000000000000000000000000"
 const PICTURE_SERVICE_TESTING_IMAGE_ID = "111111111111111111111111"
 
 describe("PictureService Integration Test", () => {
-    environment.overwrite(<SDKConfig>{apiUrl: "http://localhost:3000", cdnUrl: "http://localhost:4000"})
     const service = new PictureService(
         PICTURE_SERVICE_TESTING_TOKEN,
         PICTURE_SERVICE_TESTING_USER_ID,
