@@ -8,9 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      REGISTRY: git.chatenium.hu
-      IMAGE_NAME: chatenium/api
 
     services:
       mongodb:
@@ -26,8 +23,8 @@ jobs:
       api:
         image: git.chatenium.hu/chatenium/api:latest
         credentials:
-          username: ${{ secrets.REGISTRY_USER }}
-          password: ${{ secrets.REGISTRY_PASS }}
+          username: ${{ secrets.REPO_USER }}
+          password: ${{ secrets.REPO_PASS }}
         ports:
           - 3000:3000
         env:
@@ -38,8 +35,8 @@ jobs:
       cdn:
         image: git.chatenium.hu/chatenium/cdn:latest
         credentials:
-          username: ${{ secrets.REGISTRY_USER }}
-          password: ${{ secrets.REGISTRY_PASS }}
+          username: ${{ secrets.REPO_USER }}
+          password: ${{ secrets.REPO_PASS }}
         ports:
           - 4000:4000
         env:
