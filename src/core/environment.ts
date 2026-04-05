@@ -1,6 +1,7 @@
 export interface SDKConfig {
     apiUrl: string;
     cdnUrl: string;
+    wsUrl: string;
 }
 
 const isNode =
@@ -22,6 +23,7 @@ const getEnv = (key: string): string | undefined => {
 const DefaultEnvironment: SDKConfig = {
     apiUrl: getEnv('API_URL') ?? "https://api.chatenium.hu",
     cdnUrl: getEnv('CDN_URL') ?? "https://cdn.chatenium.hu",
+    cdnUrl: getEnv('WS_URL') ?? "wss://api.chatenium.hu",
 };
 
 let currentConfig: SDKConfig = { ...DefaultEnvironment };

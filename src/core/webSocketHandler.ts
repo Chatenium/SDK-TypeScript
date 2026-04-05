@@ -40,7 +40,7 @@ export class WebSocketHandler {
             const resp = await client.post<WSMakeTokenResp>("v2/ws/makeToken", <WSMakeTokenReq>{
                 userid: userid,
             });
-            this.connection = new WebSocket(`${environment.get().apiUrl}/v2/ws?userid=${userid}&access_token=${resp.data.token}`)
+            this.connection = new WebSocket(`${environment.get().wsUrl}/v2/ws?userid=${userid}&access_token=${resp.data.token}`)
             console.log("Connected to websocket successfully")
             this.startListening()
             return
