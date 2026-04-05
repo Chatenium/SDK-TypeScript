@@ -48,3 +48,6 @@ jobs:
         run: |
           npm install
           npm test
+        env:
+          API_URL: http://api:3000
+          CDN_URL: http://cdn:4000

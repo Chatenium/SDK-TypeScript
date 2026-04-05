@@ -3,19 +3,40 @@ export interface SDKConfig {
     cdnUrl: string;
 }
 
-const DefaultEnvironment: SDKConfig = {
-    apiUrl: "https://api.chatenium.hu",
-    cdnUrl: "https://cdn.chatenium.hu",
+const isNode =
+    typeof process !== 'undefined' &&
+    typeof process.versions !== 'undefined' &&
+    typeof process.versions.node !== 'undefined';
+
+if (isNode) {
+    try {
+        require('dotenv').config();
+    } catch { }
 }
 
-let currentConfig = {...DefaultEnvironment}
+const getEnv = (key: string): string | undefined => {
+    if (!isNode) return undefined;
+    return process.env?.[key];
+};
+
+const DefaultEnvironment: SDKConfig = {
+    apiUrl: getEnv('API_URL') ?? "https://api.chatenium.hu",
+    cdnUrl: getEnv('CDN_URL') ?? "https://cdn.chatenium.hu",
+};
+
+let currentConfig: SDKConfig = { ...DefaultEnvironment };
 
 export const environment = {
-    get: () => currentConfig,
-    overwrite: (newConfig: Partial<SDKConfig>) => {
+    get(): SDKConfig {
+        return { ...currentConfig };
+    },
+    overwrite(newConfig: Partial<SDKConfig>): void {
         currentConfig = {
             ...currentConfig,
             ...newConfig,
         };
     },
-}
+    reset(): void {
+        currentConfig = { ...DefaultEnvironment };
+    }
+};
