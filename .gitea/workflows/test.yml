@@ -34,6 +34,7 @@ jobs:
         env:
           ENVIRONMENT: "testing"
           REDIS_SERVER_ADDR: redis:6379
+          MAIN_API_URL: http://api:3000
 
     steps:
       - name: Checkout code
