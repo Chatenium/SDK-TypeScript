@@ -7,5 +7,5 @@ beforeEach(async () => {
         apiUrl: "http://localhost:3000"
     })
 
-    await getClient().post("v2/reset")
+    await getClient(false).post("v2/reset")
 })

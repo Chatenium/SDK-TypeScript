@@ -1,0 +1,61 @@
+name: Setup testing environment and test the code
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY: git.chatenium.hu
+      IMAGE_NAME: chatenium/api
+
+    services:
+      mongodb:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+
+      api:
+        image: git.chatenium.hu/chatenium/api:latest
+        credentials:
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PASS }}
+        ports:
+          - 3000:3000
+        env:
+          ENVIRONMENT_TYPE: "testing"
+          MONGODB_URL: mongodb://mongodb:27017
+          REDIS_SERVER_ADDR: redis:6379
+
+      cdn:
+        image: git.chatenium.hu/chatenium/cdn:latest
+        credentials:
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PASS }}
+        ports:
+          - 4000:4000
+        env:
+          ENVIRONMENT: "testing"
+          REDIS_SERVER_ADDR: redis:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Vitest
+        run: |
+          npm install
+          npm test

@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "vitest run --project unit",
+    "test": "vitest run",
+    "test-unit": "vitest run --project unit",
     "test-integration": "vitest run --project integration",
     "test:watch": "vitest"
   },
@@ -17,6 +18,7 @@
   "dependencies": {
     "@faker-js/faker": "^10.4.0",
     "axios": "^1.14.0",
-    "msw": "^2.12.14"
+    "msw": "^2.12.14",
+    "uuid": "^13.0.0"
   }
 }
