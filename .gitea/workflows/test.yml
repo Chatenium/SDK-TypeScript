@@ -12,21 +12,15 @@ jobs:
     services:
       mongodb:
         image: mongo:6.0
-        ports:
-          - 27017:27017
 
       redis:
         image: redis:7-alpine
-        ports:
-          - 6379:6379
 
       api:
         image: git.chatenium.hu/chatenium/api:latest
         credentials:
           username: ${{ secrets.REPO_USER }}
           password: ${{ secrets.REPO_TOKEN }}
-        ports:
-          - 3000:3000
         env:
           ENVIRONMENT_TYPE: "testing"
           MONGODB_URL: mongodb://mongodb:27017
@@ -37,8 +31,6 @@ jobs:
         credentials:
           username: ${{ secrets.REPO_USER }}
           password: ${{ secrets.REPO_TOKEN }}
-        ports:
-          - 4000:4000
         env:
           ENVIRONMENT: "testing"
           REDIS_SERVER_ADDR: redis:6379
