@@ -3,7 +3,7 @@ import {FileUploadService} from "./fileUploadService";
 
 describe("fileUploadService", () => {
     it('should upload files', async () => {
-        const service = new FileUploadService("", null, null);
+        const service = new FileUploadService("");
         const uploadId = await service.uploadFiles("", "", [])
         expect(uploadId).toBe("MockUploadId")
     });

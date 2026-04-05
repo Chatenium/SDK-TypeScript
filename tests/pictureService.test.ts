@@ -15,9 +15,7 @@ describe("PictureService Integration Test", () => {
         PICTURE_SERVICE_TESTING_TOKEN,
         PICTURE_SERVICE_TESTING_USER_ID,
         PICTURE_SERVICE_TESTING_USER_ID,
-        new DatabaseMock(),
-        getClient(false),
-        getClient(true),
+        new DatabaseMock()
     )
 
     it('should get uploads', async () => {

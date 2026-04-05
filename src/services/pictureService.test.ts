@@ -4,7 +4,7 @@ import {DatabaseMock} from "../mocks/storage/database";
 import {faker} from "@faker-js/faker/locale/en";
 
 describe("PictureService", () => {
-    const service = new PictureService("", "", "", new DatabaseMock(), null, null)
+    const service = new PictureService("", "", "", new DatabaseMock())
 
     it('should get pictures', async () => {
         const uploads = await service.get()

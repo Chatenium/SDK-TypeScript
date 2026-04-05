@@ -15,7 +15,7 @@ describe("FileUploadService Integration Testing", () => {
             responseType: 'blob'
         });
 
-        const service = new FileUploadService(FILE_UPL_SERVICE_TESTING_TOKEN, getClient(false), getClient(true));
+        const service = new FileUploadService(FILE_UPL_SERVICE_TESTING_TOKEN);
         await service.uploadFiles(
             FILE_UPL_SERVICE_TESTING_CHAT_ID,
             FILE_UPL_SERVICE_TESTING_USER_ID,

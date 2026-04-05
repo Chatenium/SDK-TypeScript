@@ -1,5 +1,4 @@
 import {DatabaseAPI} from "../storage/database";
-import {AuthMethods} from "../domain/authService.schema";
 import {getClient} from "../core/http";
 import {AxiosInstance, isAxiosError} from "axios";
 import {GenericErrorBody} from "../domain/http.schema";
@@ -18,7 +17,8 @@ import {
     UnbanMemberReq, UploadNewPictureReq
 } from "../domain/networkService.schema";
 import {PublicUserData, RGB} from "../domain/common.schema";
-import {http} from "msw";
+import {WebSocketHandler} from "../core/webSocketHandler";
+import {MessageListener} from "../domain/websocket.schema";
 
 export class NetworkService {
     userid: string;
@@ -26,15 +26,26 @@ export class NetworkService {
     database: DatabaseAPI;
     client: AxiosInstance
 
-    constructor(userid: string, token: string, networkId: string, database: DatabaseAPI, httpClientOverwrite: AxiosInstance | null) {
+    constructor(userid: string, token: string, networkId: string, database: DatabaseAPI, wsMessageListener: MessageListener) {
         this.userid = userid;
         this.networkId = networkId;
         this.database = database;
-        this.client = (httpClientOverwrite ?? getClient(false)).create({
+        this.client = getClient(false).create({
             headers: {
-                "Authorization": token
+                "Authorization": token,
+                "X-WS-ID": WebSocketHandler.getInstance().connId
             }
         })
+        WebSocketHandler.getInstance().registerService({
+            identifier: networkId,
+            onNewConnId: this.onNewConnId,
+            onNewMessage: wsMessageListener,
+        })
+    }
+
+    private onNewConnId(newConnId: string) {
+        console.log("NetworkService: New connection id")
+        this.client.defaults.headers["X-WS-ID"] = newConnId;
     }
 
     /**
@@ -101,7 +112,7 @@ export class NetworkService {
      */
     async acceptInvite(inviteId: string): Promise<void> {
         try {
-            const resp = await this.client.post("network/acceptInvite", <AcceptInviteReq>{
+            await this.client.post("network/acceptInvite", <AcceptInviteReq>{
                 userid: this.userid,
                 inviteId: inviteId,
             });

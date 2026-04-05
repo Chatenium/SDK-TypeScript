@@ -23,7 +23,7 @@ describe("NetworkService Integration Testing", () => {
         NETWORK_SERVICE_TESTING_TOKEN,
         NETWORK_SERVICE_TESTING_NETWORK_ID,
         new DatabaseMock(),
-        getClient(false),
+        (action, data) => {}
     )
 
     it("should get invites", async () => {

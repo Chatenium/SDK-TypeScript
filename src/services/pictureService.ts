@@ -20,16 +20,16 @@ export class PictureService {
     client: AxiosInstance
     cdnClient: AxiosInstance
 
-    constructor(token: string, uploaderId: string, userid: string, database: DatabaseAPI, httpClientOverwrite: AxiosInstance | null, cdnClientOverwrite: AxiosInstance | null) {
+    constructor(token: string, uploaderId: string, userid: string, database: DatabaseAPI) {
         this.userid = userid;
         this.uploaderId = uploaderId;
         this.database = database;
-        this.client = (httpClientOverwrite ?? getClient(false)).create({
+        this.client = getClient(false).create({
             headers: {
                 "Authorization": token
             }
         })
-        this.cdnClient = (cdnClientOverwrite ?? getClient(true)).create({
+        this.cdnClient = getClient(true).create({
             headers: {
                 "Authorization": token
             }

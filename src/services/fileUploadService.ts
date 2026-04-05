@@ -15,13 +15,13 @@ export class FileUploadService {
     client: AxiosInstance;
     cdnClient: AxiosInstance;
 
-    constructor(token: string, private httpClientOverwrite: AxiosInstance | null, private cdnHttpClientOverwrite: AxiosInstance | null) {
-        this.client = (httpClientOverwrite ?? getClient(false)).create({
+    constructor(token: string) {
+        this.client = getClient(false).create({
             headers: {
                 "Authorization": token
             }
         })
-        this.cdnClient = (cdnHttpClientOverwrite ?? getClient(true)).create({
+        this.cdnClient = getClient(true).create({
             headers: {
                 "Authorization": token
             }
