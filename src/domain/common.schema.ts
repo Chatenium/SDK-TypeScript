@@ -15,3 +15,13 @@ export interface PublicUserData {
     username: string
     userid: string
 }
+
+export interface Attachment {
+    fileId: string
+    fileName: string
+    format: string
+    type: string
+    path: string
+    height: number
+    width: number
+}

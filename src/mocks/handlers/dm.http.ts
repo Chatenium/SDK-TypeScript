@@ -1,0 +1,31 @@
+import {http, HttpResponse} from "msw";
+import {Chat} from "../../domain/chatService.schema";
+import {FinishMessageReq, GetMessagePosResp, Message, PinnedMessage} from "../../domain/dmService.schema";
+import {CreateNetworkReq, Network} from "../../domain/networkService.schema";
+
+export const dmHandlers = [
+    http.get('*/chat/dm/messages', () => {
+        return HttpResponse.json(<Message[]>[{
+            message: "This is a message",
+        }])
+    }),
+
+    http.get('*/chat/dm/getMessagePosition', () => {
+        return HttpResponse.json(<GetMessagePosResp>{
+            messagePos: 5000
+        })
+    }),
+
+    http.get('*/chat/dm/pinnedMessages', () => {
+        return HttpResponse.json(<PinnedMessage[]>[{
+            message: "This is a pinned message",
+        }])
+    }),
+
+    http.post('*/chat/dm/finishMessage', async ({request}) => {
+        const body = await request.json() as FinishMessageReq
+        return HttpResponse.json(<Message>{
+            message: body.message,
+        })
+    }),
+]
