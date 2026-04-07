@@ -12,6 +12,7 @@ import {
     StartNewReq,
     ToggleChatMuteReq
 } from "../domain/chatService.schema";
+import {Message} from "../domain/dmService.schema";
 
 /**
  * ChatService is an exception because it's one instance for all chats because it's unnecessary to create a new instance for each chat
@@ -47,13 +48,22 @@ export class ChatService {
     async get(): Promise<Chat[]> {
         try {
             const resp = await this.client.get<Chat[]>(`chat/get?userid=${this.userid}`);
+            this.database.set("chats", this.userid, JSON.stringify(resp.data))
             return resp.data
         } catch (e) {
-            console.log(e)
             if (isAxiosError<GenericErrorBody>(e)) {
                 throw e;
             }
             throw new Error("Unexpected error")
+        }
+    }
+
+    getQuick(): Message[] {
+        const chats = this.database.get("chats", this.userid)
+        if (chats) {
+            return JSON.parse(chats)
+        } else {
+            throw new Error("No chats in database")
         }
     }
 

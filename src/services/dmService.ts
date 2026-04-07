@@ -53,12 +53,24 @@ export class DMService {
     async get(from: number = 0): Promise<Message[]> {
         try {
             const resp = await this.client.get<Message[]>(`chat/dm/messages?chatid=${this.chatid}&userid=${this.userid}&from=${from}`);
+            if (from == 0) {
+                this.database.set("messages", this.chatid, JSON.stringify(resp.data))
+            }
             return resp.data
         } catch (e) {
             if (isAxiosError<GenericErrorBody>(e)) {
                 throw e;
             }
             throw new Error("Unexpected error")
+        }
+    }
+
+    getQuick(): Message[] {
+        const messages = this.database.get("messages", this.chatid)
+        if (messages) {
+            return JSON.parse(messages)
+        } else {
+            throw new Error("No messages in database")
         }
     }
 

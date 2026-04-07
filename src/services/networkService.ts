@@ -19,6 +19,7 @@ import {
 import {PublicUserData, RGB} from "../domain/common.schema";
 import {WebSocketHandler} from "../core/webSocketHandler";
 import {MessageListener} from "../domain/websocket.schema";
+import {Message} from "../domain/dmService.schema";
 
 export class NetworkService {
     userid: string;
@@ -97,12 +98,22 @@ export class NetworkService {
             const resp = await this.client.post<Network[]>("network/get", <GetNetworksReq>{
                 userid: this.userid,
             });
+            this.database.set("networks", this.userid, JSON.stringify(resp.data))
             return resp.data
         } catch (e) {
             if (isAxiosError<GenericErrorBody>(e)) {
                 throw e;
             }
             throw new Error("Unexpected error")
+        }
+    }
+
+    getQuick(): Message[] {
+        const networks = this.database.get("networks", this.userid)
+        if (networks) {
+            return JSON.parse(networks)
+        } else {
+            throw new Error("No networks in database")
         }
     }
 

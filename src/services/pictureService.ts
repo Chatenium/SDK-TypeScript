@@ -12,6 +12,7 @@ import {
     GetResp, PostCommentReq, ToggleFollowReq, TogglePictureLikeReq, UploadImageReq
 } from "../domain/pictureService.schema";
 import {environment} from "../core/environment";
+import {Message} from "../domain/dmService.schema";
 
 export class PictureService {
     userid: string;
@@ -42,6 +43,7 @@ export class PictureService {
     async get(): Promise<GetResp> {
         try {
             const resp = await this.client.get<GetResp>(`picture/pictures?userid=${this.userid}&target=${this.uploaderId}`);
+            this.database.set("pictures", this.uploaderId, JSON.stringify(resp.data))
             return resp.data
         } catch (e) {
             console.log(e)
@@ -49,6 +51,15 @@ export class PictureService {
                 throw e;
             }
             throw new Error("Unexpected error")
+        }
+    }
+
+    getQuick(): Message[] {
+        const pictures = this.database.get("pictures", this.uploaderId)
+        if (pictures) {
+            return JSON.parse(pictures)
+        } else {
+            throw new Error("No pictures in database")
         }
     }
 
