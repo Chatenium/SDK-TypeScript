@@ -863,7 +863,7 @@ export class NetworkService {
     }
 
     /**
-     * Fetches network data from an invite
+     * Fetches network data from an invitation
      * @param inviteId
      */
     async getFromInvite(inviteId: string): Promise<Network> {
