@@ -4,6 +4,9 @@ export class DatabaseMock implements DatabaseAPI {
     database: { [collection: string]: { [key: string]: string } } = {};
 
     set(collection: string, key: string, value: any) {
+        if (!this.database[collection]) {
+            this.database[collection] = {};
+        }
         this.database[collection][key] = JSON.stringify(value);
     }
 
