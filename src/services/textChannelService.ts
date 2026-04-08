@@ -71,8 +71,8 @@ export class TextChannelServiceService {
         }
     }
 
-    getQuick(): Message[] {
-        const messages = this.database.get("networkmessages", this.channelId)
+    async getQuick(): Promise<Message[]> {
+        const messages = await this.database.get("networkmessages", this.channelId)
         if (messages) {
             return JSON.parse(messages)
         } else {

@@ -33,18 +33,18 @@ export class SessionManager {
     /**
      * Loads all saved sessions
      */
-    loadSessions(): Session[] {
-        const tokens = this.keyring.getAll()
+    async loadSessions(): Promise<Session[]> {
+        const tokens = await this.keyring.getAll()
         const sessions: Session[] = []
-        tokens.forEach(token => {
-            const userData = this.database.get("sessions", token.split(".")[0])
+        for (const token of tokens) {
+            const userData = await this.database.get("sessions", token.split(".")[0])
             if (userData) {
                 sessions.push({
                     token: token,
                     userData: JSON.parse(userData)
                 })
             }
-        })
+        }
 
         return sessions
     }
@@ -52,8 +52,8 @@ export class SessionManager {
     /**
      * Gets the preferred user set by the client
      */
-    getPreferredUser(): string {
-        return this.KeyValue.get("preferredUser") ?? ""
+    async getPreferredUser(): Promise<string> {
+        return await this.KeyValue.get("preferredUser") ?? ""
     }
 
     /**
@@ -67,9 +67,9 @@ export class SessionManager {
     /**
      * Loads the preferred session by the client
      */
-    loadPreferredSession() {
-        const sessions = this.loadSessions()
-        let preferredUser = this.getPreferredUser()
+    async loadPreferredSession() {
+        const sessions = await this.loadSessions()
+        let preferredUser = await this.getPreferredUser()
         if (preferredUser == "") {
             preferredUser = sessions[0].userData.userid
             this.setPreferredUser(sessions[0].userData.userid)

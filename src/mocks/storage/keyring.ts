@@ -7,12 +7,12 @@ export class KeyringMock implements KeyringAPI {
         this.ring[key] = value;
     }
 
-    get(key: string): string {
-        return this.ring[key];
+    get(key: string): Promise<string> {
+        return Promise.resolve(this.ring[key]);
     }
 
-    getAll(): string[] {
-        return Object.keys(this.ring);
+    getAll(): Promise<string[]> {
+        return Promise.resolve(Object.keys(this.ring));
     }
 
     delete(key: string) {

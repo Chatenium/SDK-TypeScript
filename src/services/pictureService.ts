@@ -54,8 +54,8 @@ export class PictureService {
         }
     }
 
-    getQuick(): Message[] {
-        const pictures = this.database.get("pictures", this.uploaderId)
+    async getQuick(): Promise<Message[]> {
+        const pictures = await this.database.get("pictures", this.uploaderId)
         if (pictures) {
             return JSON.parse(pictures)
         } else {

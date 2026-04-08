@@ -65,8 +65,8 @@ export class DMService {
         }
     }
 
-    getQuick(): Message[] {
-        const messages = this.database.get("messages", this.chatid)
+    async getQuick(): Promise<Message[]> {
+        const messages = await this.database.get("messages", this.chatid)
         if (messages) {
             return JSON.parse(messages)
         } else {
