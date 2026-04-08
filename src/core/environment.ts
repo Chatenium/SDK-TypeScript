@@ -4,6 +4,9 @@ export interface SDKConfig {
     wsUrl: string;
 }
 
+declare const process: any;
+declare const require: any;
+
 const isNode =
     typeof process !== 'undefined' &&
     typeof process.versions !== 'undefined' &&
