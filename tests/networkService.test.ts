@@ -74,7 +74,7 @@ describe("NetworkService Integration Testing", () => {
     });
 
     it('should create rank', async () => {
-        const rankName = faker.internet.displayName()
+        const rankName = faker.internet.displayName().substring(0, 10)
         const rank = await service.createRank(rankName, <RGB>{r: 0, g: 0, b: 0}, null)
         expect(rank.name).toBe(rankName)
     });

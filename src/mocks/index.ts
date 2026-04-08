@@ -6,6 +6,7 @@ import {fileUploadHandlers} from "./handlers/fUpl.http";
 import {chatHandlers} from "./handlers/chat.http";
 import {dmHandlers} from "./handlers/dm.http";
 import {userHandler} from "./handlers/user.http";
+import {brcChanHandlers} from "./handlers/brcChan.http";
 
 export const allHandlers = [
     ...authHandlers,
@@ -15,5 +16,6 @@ export const allHandlers = [
     ...fileUploadHandlers,
     ...chatHandlers,
     ...dmHandlers,
-    ...userHandler
+    ...userHandler,
+    ...brcChanHandlers
 ]

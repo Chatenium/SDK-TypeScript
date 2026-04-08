@@ -24,7 +24,7 @@ describe("PictureService Integration Test", () => {
     });
 
     it('should create an album', async () => {
-        const albumName = faker.internet.displayName()
+        const albumName = faker.internet.displayName().substring(0, 10)
         await service.createAlbum(albumName)
         const uploads = await service.get()
         expect(uploads.pictures[1].name).toBe(albumName)
