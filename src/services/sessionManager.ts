@@ -36,8 +36,9 @@ export class SessionManager {
     async loadSessions(): Promise<Session[]> {
         const tokens = await this.keyring.getAll()
         const sessions: Session[] = []
-        for (const token of tokens) {
-            const userData = await this.database.get("sessions", token.split(".")[0])
+        for (const tokenKey of tokens) {
+            const token = await this.keyring.get(tokenKey)
+            const userData = await this.database.get("sessions", tokenKey)
             if (userData) {
                 sessions.push({
                     token: token,
