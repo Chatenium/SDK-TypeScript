@@ -1,4 +1,4 @@
-import {KeyringAPI} from "../../storage/keyring";
+import {KeyringAPI} from '../../storage/keyring.js';
 
 export class KeyringMock implements KeyringAPI {
     ring: { [key: string]: string } = {};

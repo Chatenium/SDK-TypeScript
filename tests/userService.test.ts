@@ -1,7 +1,7 @@
 import {describe, expect, it} from "vitest";
-import {UserService} from "../src/services/userService";
-import {DatabaseMock} from "../src/mocks/storage/database";
-import {RGB} from "../src/domain/common.schema"
+import {UserService} from '../src/services/userService.js';
+import {DatabaseMock} from '../src/mocks/storage/database.js';
+import {RGB} from '../src/domain/common.schema.js'
 
 const USER_SERVICE_TESTING_USER_ID = "000000000000000000000000"
 const USER_SERVICE_TESTING_TOKEN = "testingToken"

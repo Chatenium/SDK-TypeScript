@@ -1,12 +1,12 @@
 import {describe, expect, it} from "vitest";
-import {NetworkService} from "../src/services/networkService";
-import {DatabaseMock} from "../src/mocks/storage/database";
-import {environment, SDKConfig} from "../src/core/environment";
-import {getClient} from "../src/core/http";
+import {NetworkService} from '../src/services/networkService.js';
+import {DatabaseMock} from '../src/mocks/storage/database.js';
+import {environment, SDKConfig} from '../src/core/environment.js';
+import {getClient} from '../src/core/http.js';
 import {faker} from "@faker-js/faker/locale/en";
-import {AuthService} from "../src/services/authService";
-import {RGB} from "../src/domain/common.schema";
-import {NetworkPermissions, PermissionUpdate} from "../src/domain/networkService.schema";
+import {AuthService} from '../src/services/authService.js';
+import {RGB} from '../src/domain/common.schema.js';
+import {NetworkPermissions, PermissionUpdate} from '../src/domain/networkService.schema.js';
 
 const NETWORK_SERVICE_TESTING_NETWORK_ID = "000000000000000000000000"
 const NETWORK_SERVICE_TESTING_USER_ID = "000000000000000000000000"

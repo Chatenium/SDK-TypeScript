@@ -1,5 +1,5 @@
 import {describe, expect, it} from "vitest";
-import {FileUploadService} from "./fileUploadService";
+import {FileUploadService} from './fileUploadService.js';
 
 describe("fileUploadService", () => {
     it('should upload files', async () => {

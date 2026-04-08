@@ -1,6 +1,6 @@
 import {describe, expect, it} from "vitest";
-import {AuthService} from "./authService";
-import {VerificationTypeEmail} from "../domain/authService.schema";
+import {AuthService} from './authService.js';
+import {VerificationTypeEmail} from '../domain/authService.schema.js';
 import {faker} from "@faker-js/faker/locale/en";
 
 describe("AuthService", () => {

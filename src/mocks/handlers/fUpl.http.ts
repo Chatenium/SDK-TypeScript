@@ -1,6 +1,6 @@
 import {http, HttpResponse} from "msw";
-import {GetRTCAccessResp} from "../../domain/callService.schema";
-import {RegisterUploadResp} from "../../domain/fileUploadService.schema";
+import {GetRTCAccessResp} from '../../domain/callService.schema.js';
+import {RegisterUploadResp} from '../../domain/fileUploadService.schema.js';
 
 export const fileUploadHandlers = [
     http.post('*/chat/cdnRegisterUpload', () => {

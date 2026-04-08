@@ -1,4 +1,4 @@
-import {PublicUserData, TimeStamp} from "./common.schema";
+import {PublicUserData, TimeStamp} from './common.schema.js';
 
 // Request schemas
 export interface GetReq {

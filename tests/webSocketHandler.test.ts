@@ -1,5 +1,5 @@
 import {describe, it} from "vitest";
-import {WebSocketHandler} from "../src/core/webSocketHandler";
+import {WebSocketHandler} from '../src/core/webSocketHandler.js';
 
 const WEBSOCKET_HANDLER_TESTING_USER_ID = "000000000000000000000000"
 const WEBSOCKET_HANDLER_TESTING_USER_TOKEN = "testingToken"

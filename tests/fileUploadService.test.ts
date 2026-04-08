@@ -1,8 +1,8 @@
 import {describe, it} from "vitest";
-import {FileUploadService} from "../src/services/fileUploadService";
-import {environment, SDKConfig} from "../src/core/environment";
-import {getClient} from "../src/core/http";
-import {FileData} from "../src/domain/fileUploadService.schema";
+import {FileUploadService} from '../src/services/fileUploadService.js';
+import {environment, SDKConfig} from '../src/core/environment.js';
+import {getClient} from '../src/core/http.js';
+import {FileData} from '../src/domain/fileUploadService.schema.js';
 import axios from "axios";
 import {v4 as uuidv4} from 'uuid';
 

@@ -1,5 +1,5 @@
 import {http, HttpResponse} from "msw";
-import {Chat, GetAvailabilityResp, StartNewReq} from "../../domain/chatService.schema";
+import {Chat, GetAvailabilityResp, StartNewReq} from '../../domain/chatService.schema.js';
 
 export const chatHandlers = [
     http.get('*/chat/get', () => {

@@ -1,5 +1,5 @@
 import {describe, expect, it} from "vitest";
-import {BroadcastChannelService} from "./broadcastChannelService";
+import {BroadcastChannelService} from './broadcastChannelService.js';
 
 describe("BroadcastChannelService", () => {
     const service = new BroadcastChannelService("", "", "", "", "", () => {})

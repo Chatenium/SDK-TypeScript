@@ -1,6 +1,6 @@
 import {describe, expect, it} from "vitest";
-import {ChatService} from "./chatService";
-import {DatabaseMock} from "../mocks/storage/database";
+import {ChatService} from './chatService.js';
+import {DatabaseMock} from '../mocks/storage/database.js';
 import {faker} from "@faker-js/faker/locale/en";
 
 describe("ChatService", () => {

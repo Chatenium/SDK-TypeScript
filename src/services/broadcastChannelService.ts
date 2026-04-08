@@ -1,15 +1,15 @@
 import {AxiosInstance, isAxiosError} from "axios";
-import {getClient} from "../core/http";
-import {MessageListener} from "../domain/websocket.schema";
-import {WebSocketHandler} from "../core/webSocketHandler";
-import {AcceptInviteReq} from "../domain/networkService.schema";
-import {GenericErrorBody} from "../domain/http.schema";
+import {getClient} from '../core/http.js';
+import {MessageListener} from '../domain/websocket.schema.js';
+import {WebSocketHandler} from '../core/webSocketHandler.js';
+import {AcceptInviteReq} from '../domain/networkService.schema.js';
+import {GenericErrorBody} from '../domain/http.schema.js';
 import {
     CreateServerReq,
     GetRTMPDataReq,
     JoinWebsocketRoomReq,
     StreamRegistry
-} from "../domain/broadcastChannelService.schema";
+} from '../domain/broadcastChannelService.schema.js';
 
 export class BroadcastChannelService {
     userid: string

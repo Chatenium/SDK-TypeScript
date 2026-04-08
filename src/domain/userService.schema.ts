@@ -1,4 +1,4 @@
-import {TimeStamp} from "./common.schema";
+import {TimeStamp} from './common.schema.js';
 
 export interface ChangeUsernameReq {
     newUsername: string;

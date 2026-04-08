@@ -1,9 +1,9 @@
 import {describe, expect, it} from "vitest";
-import {DMService} from "../src/services/dmService";
-import {ChatService} from "../src/services/chatService";
-import {DatabaseMock} from "../src/mocks/storage/database";
+import {DMService} from '../src/services/dmService.js';
+import {ChatService} from '../src/services/chatService.js';
+import {DatabaseMock} from '../src/mocks/storage/database.js';
 import {faker} from "@faker-js/faker/locale/en";
-import {TextChannelServiceService} from "../src/services/textChannelService";
+import {TextChannelServiceService} from '../src/services/textChannelService.js';
 
 describe("DmService Integration Testing", () => {
     const TXT_CHAN_SERVICE_TESTING_CHANNEL_ID = "222222222222222222222222"

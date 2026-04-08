@@ -4,11 +4,11 @@ import {
     FileUploadRegistration, FinishUploadReq,
     RegisterUploadReq,
     RegisterUploadResp
-} from "../domain/fileUploadService.schema";
+} from '../domain/fileUploadService.schema.js';
 import {AxiosInstance, isAxiosError} from "axios";
-import {getClient} from "../core/http";
-import {InviteToCallReq} from "../domain/callService.schema";
-import {GenericErrorBody} from "../domain/http.schema";
+import {getClient} from '../core/http.js';
+import {InviteToCallReq} from '../domain/callService.schema.js';
+import {GenericErrorBody} from '../domain/http.schema.js';
 import {v4 as uuidv4} from 'uuid';
 
 export class FileUploadService {

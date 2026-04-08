@@ -1,17 +1,17 @@
-import {DatabaseAPI} from "../storage/database";
+import {DatabaseAPI} from '../storage/database.js';
 import {AxiosInstance, isAxiosError} from "axios";
-import {MessageListener} from "../domain/websocket.schema";
-import {getClient} from "../core/http";
-import {WebSocketHandler} from "../core/webSocketHandler";
-import {CreateNetworkReq, Network} from "../domain/networkService.schema";
-import {GenericErrorBody} from "../domain/http.schema";
+import {MessageListener} from '../domain/websocket.schema.js';
+import {getClient} from '../core/http.js';
+import {WebSocketHandler} from '../core/webSocketHandler.js';
+import {CreateNetworkReq, Network} from '../domain/networkService.schema.js';
+import {GenericErrorBody} from '../domain/http.schema.js';
 import {
     AcceptFileTransferReq, DeclineFileTransferReq, FileTransferSendAnswerRTCReq,
     FileTransferSendICERTCReq, FileTransferSendOfferRTCReq,
     StartNewFileTransferReq,
     StartNewFileTransferResp,
     TransferableFileMetadata
-} from "../domain/fileTransferService.schema";
+} from '../domain/fileTransferService.schema.js';
 
 export class FileTransferService {
     userid: string;

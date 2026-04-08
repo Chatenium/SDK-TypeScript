@@ -1,6 +1,6 @@
 import {http, HttpResponse} from "msw";
-import {CreateNetworkReq, Network, NetworkInvite} from "../../domain/networkService.schema";
-import {Album, Comment, CreateAlbumReq, GetResp} from "../../domain/pictureService.schema";
+import {CreateNetworkReq, Network, NetworkInvite} from '../../domain/networkService.schema.js';
+import {Album, Comment, CreateAlbumReq, GetResp} from '../../domain/pictureService.schema.js';
 
 export const pictureHandlers = [
     http.get('*/picture/pictures', () => {

@@ -1,9 +1,9 @@
 import {describe, expect, it} from "vitest";
-import {NetworkService} from "./networkService";
-import {DatabaseMock} from "../mocks/storage/database";
+import {NetworkService} from './networkService.js';
+import {DatabaseMock} from '../mocks/storage/database.js';
 import {faker} from "@faker-js/faker/locale/en";
-import {getClient} from "../core/http";
-import {environment, SDKConfig} from "../core/environment";
+import {getClient} from '../core/http.js';
+import {environment, SDKConfig} from '../core/environment.js';
 
 describe("NetworkService", () => {
     const service = new NetworkService("", "", "", new DatabaseMock(), (action, data) => {})

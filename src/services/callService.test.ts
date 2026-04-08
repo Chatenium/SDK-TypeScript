@@ -1,5 +1,5 @@
 import {describe, expect, it} from "vitest";
-import {CallService} from "./callService";
+import {CallService} from './callService.js';
 
 describe("CallService", () => {
     const handler = new CallService("", "")

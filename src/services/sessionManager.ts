@@ -1,11 +1,11 @@
-import {PublicUserData} from "../domain/common.schema";
-import {DatabaseAPI} from "../storage/database";
-import {KeyringAPI} from "../storage/keyring";
-import {KeyValueAPI} from "../storage/keyvalue";
-import {Session, ValidateSessionReq, ValidateSessionResp} from "../domain/sessionManager.schema";
+import {PublicUserData} from '../domain/common.schema.js';
+import {DatabaseAPI} from '../storage/database.js';
+import {KeyringAPI} from '../storage/keyring.js';
+import {KeyValueAPI} from '../storage/keyvalue.js';
+import {Session, ValidateSessionReq, ValidateSessionResp} from '../domain/sessionManager.schema.js';
 import {AxiosInstance} from "axios";
-import {getClient} from "../core/http";
-import {PersonalUserData} from "../domain/userService.schema";
+import {getClient} from '../core/http.js';
+import {PersonalUserData} from '../domain/userService.schema.js';
 
 export class SessionManager {
     client: AxiosInstance;

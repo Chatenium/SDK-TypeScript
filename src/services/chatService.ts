@@ -1,18 +1,18 @@
-import {DatabaseAPI} from "../storage/database";
-import {MessageListener} from "../domain/websocket.schema";
-import {getClient} from "../core/http";
-import {WebSocketHandler} from "../core/webSocketHandler";
+import {DatabaseAPI} from '../storage/database.js';
+import {MessageListener} from '../domain/websocket.schema.js';
+import {getClient} from '../core/http.js';
+import {WebSocketHandler} from '../core/webSocketHandler.js';
 import {AxiosInstance, isAxiosError} from "axios";
-import {NetworkInvite} from "../domain/networkService.schema";
-import {GenericErrorBody} from "../domain/http.schema";
+import {NetworkInvite} from '../domain/networkService.schema.js';
+import {GenericErrorBody} from '../domain/http.schema.js';
 import {
     Chat,
     GetAvailabilityReq,
     GetAvailabilityResp,
     StartNewReq,
     ToggleChatMuteReq
-} from "../domain/chatService.schema";
-import {Message} from "../domain/dmService.schema";
+} from '../domain/chatService.schema.js';
+import {Message} from '../domain/dmService.schema.js';
 
 /**
  * ChatService is an exception because it's one instance for all chats because it's unnecessary to create a new instance for each chat

@@ -1,6 +1,6 @@
 import {http, HttpResponse} from "msw";
-import {GetResp} from "../../domain/pictureService.schema";
-import {Session} from "../../domain/userService.schema";
+import {GetResp} from '../../domain/pictureService.schema.js';
+import {Session} from '../../domain/userService.schema.js';
 
 export const userHandler = [
     http.post('*/user/getSessions', () => {

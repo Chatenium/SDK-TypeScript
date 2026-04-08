@@ -1,10 +1,10 @@
-import {DatabaseAPI} from "../storage/database";
+import {DatabaseAPI} from '../storage/database.js';
 import {AxiosInstance, isAxiosError} from "axios";
-import {MessageListener} from "../domain/websocket.schema";
-import {getClient} from "../core/http";
-import {WebSocketHandler} from "../core/webSocketHandler";
-import {DeleteCategoryReq} from "../domain/networkService.schema";
-import {GenericErrorBody} from "../domain/http.schema";
+import {MessageListener} from '../domain/websocket.schema.js';
+import {getClient} from '../core/http.js';
+import {WebSocketHandler} from '../core/webSocketHandler.js';
+import {DeleteCategoryReq} from '../domain/networkService.schema.js';
+import {GenericErrorBody} from '../domain/http.schema.js';
 import {
     ChangeDisplayNameReq,
     ChangeEmailReq,
@@ -12,9 +12,9 @@ import {
     ChangeUsernameReq, CurrNewCodeTestingResp, DeleteReq, GetSessionsReq, GIF, RegisterFCMTokenReq, Session,
     ToggleGifSaveReq, UploadNewPfpCdnReq, UploadNewPfpCdnResp,
     UploadNewPfpReq, VerifyMailChangeReq, VerifyPhoneChange
-} from "../domain/userService.schema";
-import {RGB} from "../domain/common.schema";
-import {OtpPleCodeSendTestingResp} from "../domain/authService.schema";
+} from '../domain/userService.schema.js';
+import {RGB} from '../domain/common.schema.js';
+import {OtpPleCodeSendTestingResp} from '../domain/authService.schema.js';
 
 export class UserService {
     userid: string;

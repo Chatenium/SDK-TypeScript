@@ -1,7 +1,7 @@
 import {describe, expect, it} from "vitest";
-import {DMService} from "../src/services/dmService";
-import {ChatService} from "../src/services/chatService";
-import {DatabaseMock} from "../src/mocks/storage/database";
+import {DMService} from '../src/services/dmService.js';
+import {ChatService} from '../src/services/chatService.js';
+import {DatabaseMock} from '../src/mocks/storage/database.js';
 import {faker} from "@faker-js/faker/locale/en";
 
 describe("DmService Integration Testing", () => {

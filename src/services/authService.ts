@@ -1,4 +1,4 @@
-import {getClient} from "../core/http";
+import {getClient} from '../core/http.js';
 import {
     AuthMethods, FinishPleAccountReq,
     LoginPasswordAuthReq, LoginWithApple, LoginWithGoogleReq, OtpPleCodeSendTestingResp,
@@ -6,9 +6,9 @@ import {
     OtpVerifyCodeReq, PleSendCodeReq,
     PleVerifyCodeReq, PleVerifyCodeResp, RegisterReq, ResetPasswordReq, ResetPasswordResp,
     SignInSuccessResp, UserDataValidationResp, VerifyPasswordResetReq
-} from "../domain/authService.schema";
+} from '../domain/authService.schema.js';
 import {isAxiosError} from "axios";
-import {GenericErrorBody, GenericSuccessBody} from "../domain/http.schema";
+import {GenericErrorBody, GenericSuccessBody} from '../domain/http.schema.js';
 
 export class AuthService {
     /**

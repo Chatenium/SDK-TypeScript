@@ -1,4 +1,4 @@
-import {DatabaseAPI} from "../../storage/database";
+import {DatabaseAPI} from '../../storage/database.js';
 
 export class DatabaseMock implements DatabaseAPI {
     database: { [collection: string]: { [key: string]: string } } = {};

@@ -5,8 +5,8 @@ import {
     Network,
     NetworkCategory,
     NetworkInvite, POW
-} from "../../domain/networkService.schema";
-import {PublicUserData} from "../../domain/common.schema";
+} from '../../domain/networkService.schema.js';
+import {PublicUserData} from '../../domain/common.schema.js';
 
 export const authHandlers = [
     http.get('*/network/invites', () => {

@@ -1,5 +1,5 @@
 import {describe, expect, it} from "vitest";
-import {BroadcastChannelService} from "../src/services/broadcastChannelService";
+import {BroadcastChannelService} from '../src/services/broadcastChannelService.js';
 
 const BRC_CHAN_SERVICE_TESTING_NETWORK_ID = "000000000000000000000000"
 const BRC_CHAN_SERVICE_TESTING_USER_ID = "000000000000000000000000"

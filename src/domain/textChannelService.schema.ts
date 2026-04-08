@@ -1,4 +1,4 @@
-import {Attachment, PublicUserData, TimeStamp} from "./common.schema";
+import {Attachment, PublicUserData, TimeStamp} from './common.schema.js';
 
 export interface GetMessageReq {
     from: number

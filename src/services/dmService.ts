@@ -1,8 +1,8 @@
-import {DatabaseAPI} from "../storage/database";
+import {DatabaseAPI} from '../storage/database.js';
 import {AxiosInstance, isAxiosError} from "axios";
-import {MessageListener} from "../domain/websocket.schema";
-import {getClient} from "../core/http";
-import {WebSocketHandler} from "../core/webSocketHandler";
+import {MessageListener} from '../domain/websocket.schema.js';
+import {getClient} from '../core/http.js';
+import {WebSocketHandler} from '../core/webSocketHandler.js';
 import {
     DeleteMessagesReq,
     EditMessageReq,
@@ -10,11 +10,11 @@ import {
     GetMessagePosResp, JoinWsRoomReq,
     Message, PinMessageReq,
     PinnedMessage, ReadMessagesReq, UnpinMessageReq
-} from "../domain/dmService.schema";
-import {NetworkInvite} from "../domain/networkService.schema";
-import {GenericErrorBody} from "../domain/http.schema";
-import {FileData, FileUploadProgressListener} from "../domain/fileUploadService.schema";
-import {FileUploadService} from "./fileUploadService";
+} from '../domain/dmService.schema.js';
+import {NetworkInvite} from '../domain/networkService.schema.js';
+import {GenericErrorBody} from '../domain/http.schema.js';
+import {FileData, FileUploadProgressListener} from '../domain/fileUploadService.schema.js';
+import {FileUploadService} from './fileUploadService.js';
 
 export class DMService {
     userid: string;

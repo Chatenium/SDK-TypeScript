@@ -1,6 +1,6 @@
 import {describe, expect, it} from "vitest";
-import {AuthService} from "../src/services/authService";
-import {VerificationTypeEmail} from "../src/domain/authService.schema";
+import {AuthService} from '../src/services/authService.js';
+import {VerificationTypeEmail} from '../src/domain/authService.schema.js';
 
 describe("AuthService", () => {
     it("should return authMethods", async () => {

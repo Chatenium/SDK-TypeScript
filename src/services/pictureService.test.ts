@@ -1,6 +1,6 @@
 import {describe, expect, it} from "vitest";
-import {PictureService} from "./pictureService";
-import {DatabaseMock} from "../mocks/storage/database";
+import {PictureService} from './pictureService.js';
+import {DatabaseMock} from '../mocks/storage/database.js';
 import {faker} from "@faker-js/faker/locale/en";
 
 describe("PictureService", () => {

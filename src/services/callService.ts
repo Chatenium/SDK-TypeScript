@@ -1,8 +1,8 @@
-import {getClient} from "../core/http";
-import {OtpPleCodeSendTestingResp, OtpSendCodeReq} from "../domain/authService.schema";
+import {getClient} from '../core/http.js';
+import {OtpPleCodeSendTestingResp, OtpSendCodeReq} from '../domain/authService.schema.js';
 import {isAxiosError} from "axios";
-import {GenericErrorBody} from "../domain/http.schema";
-import {GetRTCAccessReq, GetRTCAccessResp, InviteToCallReq} from "../domain/callService.schema";
+import {GenericErrorBody} from '../domain/http.schema.js';
+import {GetRTCAccessReq, GetRTCAccessResp, InviteToCallReq} from '../domain/callService.schema.js';
 
 export class CallService {
     userid: string;

@@ -1,6 +1,6 @@
 import {describe, expect, it} from "vitest";
-import {UserService} from "./userService";
-import {DatabaseMock} from "../mocks/storage/database";
+import {UserService} from './userService.js';
+import {DatabaseMock} from '../mocks/storage/database.js';
 
 describe("UserService", () => {
     const service = new UserService("", "", new DatabaseMock())

@@ -4,12 +4,12 @@ import {
     WSMakeTokenReq,
     WSMakeTokenResp,
     WSMessagePayload
-} from "../domain/websocket.schema";
-import {getClient} from "./http";
-import {CreateNetworkReq, Network} from "../domain/networkService.schema";
+} from '../domain/websocket.schema.js';
+import {getClient} from './http.js';
+import {CreateNetworkReq, Network} from '../domain/networkService.schema.js';
 import {isAxiosError} from "axios";
-import {GenericErrorBody} from "../domain/http.schema";
-import {environment} from "./environment";
+import {GenericErrorBody} from '../domain/http.schema.js';
+import {environment} from './environment.js';
 
 export class WebSocketHandler {
     private static instance: WebSocketHandler;

@@ -1,7 +1,7 @@
 import {http, HttpResponse} from "msw";
-import {Chat} from "../../domain/chatService.schema";
-import {FinishMessageReq, GetMessagePosResp, Message, PinnedMessage} from "../../domain/dmService.schema";
-import {CreateNetworkReq, Network} from "../../domain/networkService.schema";
+import {Chat} from '../../domain/chatService.schema.js';
+import {FinishMessageReq, GetMessagePosResp, Message, PinnedMessage} from '../../domain/dmService.schema.js';
+import {CreateNetworkReq, Network} from '../../domain/networkService.schema.js';
 
 export const dmHandlers = [
     http.get('*/chat/dm/messages', () => {

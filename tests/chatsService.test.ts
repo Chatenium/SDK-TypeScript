@@ -1,6 +1,6 @@
 import {describe, expect, it} from "vitest";
-import {DatabaseMock} from "../src/mocks/storage/database";
-import {ChatService} from "../src/services/chatService";
+import {DatabaseMock} from '../src/mocks/storage/database.js';
+import {ChatService} from '../src/services/chatService.js';
 
 describe("ChatService Integration Testing", () => {
     const CHAT_SERVICE_TESTING_USER_ID = "000000000000000000000000"

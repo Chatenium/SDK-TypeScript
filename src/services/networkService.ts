@@ -1,7 +1,7 @@
-import {DatabaseAPI} from "../storage/database";
-import {getClient} from "../core/http";
+import {DatabaseAPI} from '../storage/database.js';
+import {getClient} from '../core/http.js';
 import {AxiosInstance, isAxiosError} from "axios";
-import {GenericErrorBody} from "../domain/http.schema";
+import {GenericErrorBody} from '../domain/http.schema.js';
 import {
     AcceptInviteReq, AssignRankToMemberReq, BanMemberReq, ChangeVisibilityReq, CreateCategoryReq, CreateChannelReq,
     CreateInviteReq,
@@ -15,11 +15,11 @@ import {
     NetworkInvite, NetworkRank, OverwriteChannelPermissionReq, OverwritePermissionReq, PermissionUpdate, POW,
     RemoveRankFromMemberReq, ToggleCategoryMuteReq, ToggleChannelNetworkMuteReq, ToggleNetworkMuteReq,
     UnbanMemberReq, UploadNewPictureReq
-} from "../domain/networkService.schema";
-import {PublicUserData, RGB} from "../domain/common.schema";
-import {WebSocketHandler} from "../core/webSocketHandler";
-import {MessageListener} from "../domain/websocket.schema";
-import {Message} from "../domain/dmService.schema";
+} from '../domain/networkService.schema.js';
+import {PublicUserData, RGB} from '../domain/common.schema.js';
+import {WebSocketHandler} from '../core/webSocketHandler.js';
+import {MessageListener} from '../domain/websocket.schema.js';
+import {Message} from '../domain/dmService.schema.js';
 
 export class NetworkService {
     userid: string;

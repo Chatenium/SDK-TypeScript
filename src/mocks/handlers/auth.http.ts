@@ -5,8 +5,8 @@ import {
     OtpSendCodeReq,
     OtpVerifyCodeReq, PleVerifyCodeReq, PleVerifyCodeResp, RegisterReq, SignInSuccessResp,
     UserDataValidationResp, VerifyPasswordResetReq
-} from "../../domain/authService.schema";
-import {GenericSuccessBody} from "../../domain/http.schema";
+} from '../../domain/authService.schema.js';
+import {GenericSuccessBody} from '../../domain/http.schema.js';
 
 export const networkHandlers = [
     http.get('*/user/authOptions', () => {

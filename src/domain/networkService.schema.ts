@@ -1,5 +1,5 @@
 // Request schemas
-import {PublicUserData, RGB, TimeStamp} from "./common.schema";
+import {PublicUserData, RGB, TimeStamp} from './common.schema.js';
 
 export interface GetInvitesReq {
     networkId: string

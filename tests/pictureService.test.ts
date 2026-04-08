@@ -1,9 +1,9 @@
 import {describe, expect, it} from "vitest";
-import {environment, SDKConfig} from "../src/core/environment";
-import {NetworkService} from "../src/services/networkService";
-import {DatabaseMock} from "../src/mocks/storage/database";
-import {getClient} from "../src/core/http";
-import {PictureService} from "../src/services/pictureService";
+import {environment, SDKConfig} from '../src/core/environment.js';
+import {NetworkService} from '../src/services/networkService.js';
+import {DatabaseMock} from '../src/mocks/storage/database.js';
+import {getClient} from '../src/core/http.js';
+import {PictureService} from '../src/services/pictureService.js';
 import {faker} from "@faker-js/faker/locale/en";
 
 const PICTURE_SERVICE_TESTING_TOKEN = "testingToken"

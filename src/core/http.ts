@@ -1,5 +1,5 @@
 import axios, {AxiosInstance} from 'axios';
-import {environment} from "./environment";
+import {environment} from './environment.js';
 
 export const getClient = (cdn: boolean) => {
     const env = environment.get();

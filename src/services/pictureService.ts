@@ -1,8 +1,8 @@
-import {DatabaseAPI} from "../storage/database";
+import {DatabaseAPI} from '../storage/database.js';
 import {AxiosInstance, isAxiosError} from "axios";
-import {getClient} from "../core/http";
-import {NetworkInvite} from "../domain/networkService.schema";
-import {GenericErrorBody} from "../domain/http.schema";
+import {getClient} from '../core/http.js';
+import {NetworkInvite} from '../domain/networkService.schema.js';
+import {GenericErrorBody} from '../domain/http.schema.js';
 import {
     Album, ChangePictureVisibilityReq, Comment,
     CreateAlbumReq,
@@ -10,9 +10,9 @@ import {
     DiscoveryResp, EditPictureTitleReq,
     FinalizeUploadReq,
     GetResp, PostCommentReq, ToggleFollowReq, TogglePictureLikeReq, UploadImageReq
-} from "../domain/pictureService.schema";
-import {environment} from "../core/environment";
-import {Message} from "../domain/dmService.schema";
+} from '../domain/pictureService.schema.js';
+import {environment} from '../core/environment.js';
+import {Message} from '../domain/dmService.schema.js';
 
 export class PictureService {
     userid: string;
