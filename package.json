@@ -1,6 +1,6 @@
 {
   "name": "@chatenium/chatenium-sdk",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A library for interacting with the Chatenium API",
   "type": "module",
   "main": "dist/index.js",
@@ -13,7 +13,10 @@
       "default": "./dist/index.js"
     },
     "./core/*": "./dist/core/*.js",
-    "./services/*": "./dist/services/*.js"
+    "./services/*": "./dist/services/*.js",
+    "./domain/*": "./dist/domain/*.js",
+    "./mocks/*": "./dist/mocks/*.js",
+    "./storage/*": "./dist/storage/*.js"
   },
   "files": [
     "dist",
