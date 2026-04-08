@@ -13,7 +13,7 @@ import {
 } from "../domain/dmService.schema";
 import {NetworkInvite} from "../domain/networkService.schema";
 import {GenericErrorBody} from "../domain/http.schema";
-import {FileData} from "../domain/fileUploadService.schema";
+import {FileData, FileUploadProgressListener} from "../domain/fileUploadService.schema";
 import {FileUploadService} from "./fileUploadService";
 
 export class DMService {
@@ -133,12 +133,13 @@ export class DMService {
      * @param replyTo
      * @param replyToMessage
      * @param attachments
+     * @param progressListener
      */
-    async sendMessage(message: string, replyTo: string | null = null, replyToMessage: string | null = null, attachments: FileData[] | null = null): Promise<Message> {
+    async sendMessage(message: string, replyTo: string | null = null, replyToMessage: string | null = null, attachments: FileData[] | null = null, progressListener: FileUploadProgressListener | null = null): Promise<Message> {
         let uploadId = ""
         if (attachments) {
             const uploader = new FileUploadService(this.token)
-            uploadId = await uploader.uploadFiles(this.chatid, this.userid, attachments)
+            uploadId = await uploader.uploadFiles(this.chatid, this.userid, attachments, progressListener!)
         }
         try {
             const resp = await this.client.post<Message>("chat/dm/finishMessage", <FinishMessageReq>{

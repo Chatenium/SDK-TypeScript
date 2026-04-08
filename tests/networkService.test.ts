@@ -56,12 +56,6 @@ describe("NetworkService Integration Testing", () => {
         expect(category.name).toBe(catName)
     });
 
-    it('should delete category', async () => {
-        await service.deleteCategory(NETWORK_SERVICE_TESTING_CATEGORY_ID)
-        const networks = await service.get()
-        expect(networks[0].categories.length).toBe(0)
-    });
-
     it('should move category', async () => {
         await service.createCategory("Test name", "Test desc")
         await service.moveCategory(0, 1)

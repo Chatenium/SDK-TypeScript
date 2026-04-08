@@ -4,6 +4,7 @@ import {environment, SDKConfig} from "../src/core/environment";
 import {getClient} from "../src/core/http";
 import {FileData} from "../src/domain/fileUploadService.schema";
 import axios from "axios";
+import {v4 as uuidv4} from 'uuid';
 
 describe("FileUploadService Integration Testing", () => {
     const FILE_UPL_SERVICE_TESTING_USER_ID = "000000000000000000000000"
@@ -21,12 +22,16 @@ describe("FileUploadService Integration Testing", () => {
             FILE_UPL_SERVICE_TESTING_USER_ID,
             [
                 {
+                    fileId: uuidv4(),
                     name: "filename",
                     type: "image",
                     extension: "jpeg",
                     data: new File([response.data], "filename", { type: "image/jpeg" })
                 }
-            ]
+            ],
+            {
+                fileProgressUpdate: () => {},
+            }
         )
     });
 })

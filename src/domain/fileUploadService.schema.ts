@@ -33,8 +33,13 @@ export interface FileUploadRegistration {
 }
 
 export interface FileData {
+    fileId: string
     name: string
     extension: string
     type: string
     data: File
+}
+
+export interface FileUploadProgressListener {
+    fileProgressUpdate: (fileId: string, allChunks: number, chunksDone: number) => void
 }
