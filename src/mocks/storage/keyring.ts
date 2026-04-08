@@ -11,11 +11,11 @@ export class KeyringMock implements KeyringAPI {
         return this.ring[key];
     }
 
-    delete(key: string) {
-        delete this.ring[key];
+    getAll(): string[] {
+        return Object.keys(this.ring);
     }
 
-    flush() {
-        this.ring = {};
+    delete(key: string) {
+        delete this.ring[key];
     }
 }

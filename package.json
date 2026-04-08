@@ -15,7 +15,7 @@
     "typescript": "^5.5.3",
     "vitest": "^4.1.2"
   },
-  "private": true,
+  "private": false,
   "dependencies": {
     "@faker-js/faker": "^10.4.0",
     "axios": "^1.14.0",

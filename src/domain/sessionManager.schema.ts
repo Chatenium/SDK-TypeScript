@@ -1,5 +1,5 @@
 import {PublicUserData} from "./common.schema";
-import {GIF} from "./userService.schema";
+import {GIF, PersonalUserData} from "./userService.schema";
 
 export interface Session {
     userData: PersonalUserData
