@@ -39,11 +39,13 @@ export class DMService {
             onNewConnId: this.onNewConnId,
             onNewMessage: wsMessageListener,
         })
+        this.joinWebSocketRoom().then()
     }
 
     private onNewConnId(newConnId: string) {
         console.log("NetworkService: New connection id")
         this.client.defaults.headers["X-WS-ID"] = newConnId;
+        this.joinWebSocketRoom().then()
     }
 
     /**
@@ -242,9 +244,9 @@ export class DMService {
     /**
      * Joins the WebSocket room to start receiving realtime messages
      */
-    async joinWebSocketRoom(): Promise<void> {
+    private async joinWebSocketRoom(): Promise<void> {
         try {
-            const resp = await this.client.patch("chat/dm/joinWebSocketRoom", <JoinWsRoomReq>{
+            const resp = await this.client.patch("v2/chat/dm/joinWebSocketRoom", <JoinWsRoomReq>{
                 chatid: this.chatid,
                 userid: this.userid,
                 connId: WebSocketHandler.getInstance().connId,
