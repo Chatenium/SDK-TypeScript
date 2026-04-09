@@ -42,7 +42,7 @@ export class DMService {
     }
 
     private onNewConnId(newConnId: string) {
-        console.log("NetworkService: New connection id")
+        console.log("DmService: New connection id")
         this.client.defaults.headers["X-WS-ID"] = newConnId;
         this.joinWebSocketRoom().then()
     }

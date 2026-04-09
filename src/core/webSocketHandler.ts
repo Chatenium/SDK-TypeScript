@@ -65,6 +65,7 @@ export class WebSocketHandler {
                     console.log("ConnectionID received")
                     const data: WSConnIdPayload = JSON.parse(payl.data);
                     this.listeners.forEach(listener => {
+                        console.log(data.connId, listener)
                         listener.onNewConnId(data.connId)
                         this.connectionId = data.connId;
                     })
@@ -78,6 +79,7 @@ export class WebSocketHandler {
     }
 
     public registerService(service: WSListenerPipe) {
+        console.log("Registering service", service)
         this.listeners.add(service);
     }
 
