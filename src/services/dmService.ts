@@ -246,7 +246,7 @@ export class DMService {
      */
     private async joinWebSocketRoom(): Promise<void> {
         try {
-            const resp = await this.client.patch("v2/chat/dm/joinWebSocketRoom", <JoinWsRoomReq>{
+           await this.client.post("v2/chat/dm/joinWebSocketRoom", <JoinWsRoomReq>{
                 chatid: this.chatid,
                 userid: this.userid,
                 connId: WebSocketHandler.getInstance().connId,

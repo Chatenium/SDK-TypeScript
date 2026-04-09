@@ -28,4 +28,8 @@ export const dmHandlers = [
             message: body.message,
         })
     }),
+
+    http.post('*/v2/chat/dm/joinWebSocketRoom', async () => {
+        return HttpResponse.json()
+    }),
 ]
