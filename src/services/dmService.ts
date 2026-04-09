@@ -39,7 +39,6 @@ export class DMService {
             onNewConnId: this.onNewConnId,
             onNewMessage: wsMessageListener,
         })
-        this.joinWebSocketRoom().then()
     }
 
     private onNewConnId(newConnId: string) {
@@ -244,7 +243,7 @@ export class DMService {
     /**
      * Joins the WebSocket room to start receiving realtime messages
      */
-    private async joinWebSocketRoom(): Promise<void> {
+    async joinWebSocketRoom(): Promise<void> {
         try {
            await this.client.post("v2/chat/dm/joinWebSocketRoom", <JoinWsRoomReq>{
                 chatid: this.chatid,
