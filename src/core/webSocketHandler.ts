@@ -64,10 +64,10 @@ export class WebSocketHandler {
                 if (payl.action == "connectionId") {
                     console.log("ConnectionID received")
                     const data: WSConnIdPayload = JSON.parse(payl.data);
+                    this.connectionId = data.connId;
                     this.listeners.forEach(listener => {
                         console.log(data.connId, listener)
                         listener.onNewConnId(data.connId)
-                        this.connectionId = data.connId;
                     })
                 } else {
                     this.listeners.forEach(listener => {
