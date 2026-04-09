@@ -141,7 +141,7 @@ export class DMService {
         let uploadId = ""
         if (attachments) {
             const uploader = new FileUploadService(this.token)
-            uploadId = await uploader.uploadFiles(this.chatid, this.userid, attachments, progressListener!)
+            uploadId = await uploader.uploadFiles(tempMsgId, this.chatid, this.userid, attachments, progressListener!)
         }
         try {
             const resp = await this.client.post<Message>("chat/dm/finishMessage", <FinishMessageReq>{
