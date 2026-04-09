@@ -41,5 +41,5 @@ export interface FileData {
 }
 
 export interface FileUploadProgressListener {
-    fileProgressUpdate: (fileId: string, allChunks: number, chunksDone: number) => void
+    fileProgressUpdate: (tempMsgId: string, fileId: string, allChunks: number, chunksDone: number) => void
 }

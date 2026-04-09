@@ -23,7 +23,7 @@ describe("DmService", () => {
 
     it('should send a new message', async () => {
         const message = faker.internet.displayName()
-        const newMessage = await service.sendMessage(message)
+        const newMessage = await service.sendMessage("", message)
         expect(newMessage.message).toBe(message)
     });
 })

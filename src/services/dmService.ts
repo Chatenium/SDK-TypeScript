@@ -130,13 +130,14 @@ export class DMService {
 
     /**
      * Sends a new message to the chat
+     * @param tempMsgId
      * @param message
      * @param replyTo
      * @param replyToMessage
      * @param attachments
      * @param progressListener
      */
-    async sendMessage(message: string, replyTo: string | null = null, replyToMessage: string | null = null, attachments: FileData[] | null = null, progressListener: FileUploadProgressListener | null = null): Promise<Message> {
+    async sendMessage(tempMsgId: string, message: string, replyTo: string | null = null, replyToMessage: string | null = null, attachments: FileData[] | null = null, progressListener: FileUploadProgressListener | null = null): Promise<Message> {
         let uploadId = ""
         if (attachments) {
             const uploader = new FileUploadService(this.token)

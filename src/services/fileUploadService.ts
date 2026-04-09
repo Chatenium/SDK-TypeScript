@@ -39,12 +39,13 @@ export class FileUploadService {
 
     /**
      * Automatically registers the upload, calculates chunksize and uploads each chunk and returns with an uploadId that must be provided when sending the message
+     * @param tempMsgId
      * @param roomId chatid or channelId
      * @param userid
      * @param files
      * @param listener
      */
-    async uploadFiles(roomId: string, userid: string, files: FileData[], listener: FileUploadProgressListener): Promise<string> {
+    async uploadFiles(tempMsgId: string, roomId: string, userid: string, files: FileData[], listener: FileUploadProgressListener): Promise<string> {
         let registrations: FileUploadRegistration[] = [];
 
         files.forEach(file => {
@@ -63,7 +64,7 @@ export class FileUploadService {
                 files: registrations,
             });
             for (let filesUploaded = 0; filesUploaded < files.length; filesUploaded++) {
-                await this.uploadFile(resp.data.uploadId, roomId, userid, files[filesUploaded], registrations[filesUploaded], listener)
+                await this.uploadFile(tempMsgId, resp.data.uploadId, roomId, userid, files[filesUploaded], registrations[filesUploaded], listener)
             }
             await this.finishUpload(roomId, userid, resp.data.uploadId)
             return resp.data.uploadId
@@ -93,7 +94,7 @@ export class FileUploadService {
         }
     }
 
-    private async uploadFile(uploadId: string, roomId: string, userid: string, file: FileData, registration: FileUploadRegistration, listener: FileUploadProgressListener): Promise<void> {
+    private async uploadFile(tempMsgId: string, uploadId: string, roomId: string, userid: string, file: FileData, registration: FileUploadRegistration, listener: FileUploadProgressListener): Promise<void> {
         const chunkSize = this.calculateChunkSize(file.data.size);
         const totalChunks = Math.ceil(file.data.size / chunkSize);
 
@@ -105,7 +106,7 @@ export class FileUploadService {
             const chunk = new Uint8Array(arrayBuffer.slice(start, end));
             const base64 = this.uint8ToBase64(chunk);
             await this.uploadChunk(uploadId, roomId, userid, registration.fileId, base64);
-            listener.fileProgressUpdate(file.fileId, totalChunks, i)
+            listener.fileProgressUpdate(tempMsgId, file.fileId, totalChunks, i)
         }
     }
 

@@ -38,7 +38,7 @@ describe("DmService Integration Testing", () => {
 
     it('should send a message', async () => {
         const message = faker.lorem.paragraph()
-        const newMessage = await service.sendMessage(message)
+        const newMessage = await service.sendMessage("", message)
         expect(newMessage.message).toBe(message)
     });
 
