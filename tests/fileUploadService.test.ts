@@ -18,6 +18,7 @@ describe("FileUploadService Integration Testing", () => {
 
         const service = new FileUploadService(FILE_UPL_SERVICE_TESTING_TOKEN);
         await service.uploadFiles(
+            "",
             FILE_UPL_SERVICE_TESTING_CHAT_ID,
             FILE_UPL_SERVICE_TESTING_USER_ID,
             [
