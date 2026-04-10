@@ -39,7 +39,7 @@ export class NetworkService {
         })
         WebSocketHandler.getInstance().registerService({
             identifier: networkId,
-            onNewConnId: this.onNewConnId,
+            onNewConnId: newConnId => this.onNewConnId(newConnId),
             onNewMessage: wsMessageListener,
         })
     }

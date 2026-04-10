@@ -36,7 +36,7 @@ export class DMService {
         })
         WebSocketHandler.getInstance().registerService({
             identifier: chatid,
-            onNewConnId: this.onNewConnId,
+            onNewConnId: newConnId => this.onNewConnId(newConnId),
             onNewMessage: wsMessageListener,
         })
     }

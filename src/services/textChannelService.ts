@@ -40,7 +40,7 @@ export class TextChannelServiceService {
         })
         WebSocketHandler.getInstance().registerService({
             identifier: channelId,
-            onNewConnId: this.onNewConnId,
+            onNewConnId: newConnId => this.onNewConnId(newConnId),
             onNewMessage: wsMessageListener,
         })
     }

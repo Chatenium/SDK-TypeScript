@@ -32,7 +32,7 @@ export class ChatService {
         })
         WebSocketHandler.getInstance().registerService({
             identifier: userid,
-            onNewConnId: this.onNewConnId,
+            onNewConnId: newConnId => this.onNewConnId(newConnId),
             onNewMessage: wsMessageListener,
         })
     }
