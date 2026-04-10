@@ -80,6 +80,9 @@ export class WebSocketHandler {
 
     public registerService(service: WSListenerPipe) {
         console.log("Registering service", service)
+        if (this.connId) {
+            service.onNewConnId(this.connId)
+        }
         this.listeners.add(service);
     }
 
