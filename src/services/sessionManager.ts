@@ -36,14 +36,21 @@ export class SessionManager {
     async loadSessions(): Promise<Session[]> {
         const tokens = await this.keyring.getAll()
         const sessions: Session[] = []
+
         for (const tokenKey of tokens) {
-            const token = await this.keyring.get(tokenKey)
-            const userData = await this.database.get("sessions", tokenKey)
-            if (userData) {
-                sessions.push({
-                    token: token,
-                    userData: JSON.parse(userData)
-                })
+            try {
+                const token = await this.keyring.get(tokenKey)
+                const userData = await this.database.get("sessions", tokenKey)
+
+                if (userData && userData.trim().length > 0) {
+                    sessions.push({
+                        token: token,
+                        userData: JSON.parse(userData)
+                    })
+                }
+            } catch (e) {
+                console.error(`Failed to parse session for ${tokenKey}:`, e)
+                continue
             }
         }
 
@@ -70,6 +77,11 @@ export class SessionManager {
      */
     async loadPreferredSession() {
         const sessions = await this.loadSessions()
+
+        if (sessions.length == 0) {
+            throw new Error("No sessions found")
+        }
+
         let preferredUser = await this.getPreferredUser()
         if (preferredUser == "") {
             preferredUser = sessions[0].userData.userid
