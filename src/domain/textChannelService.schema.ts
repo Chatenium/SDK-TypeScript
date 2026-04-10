@@ -78,6 +78,7 @@ export interface JoinWsRoomReq {
     networkId: string
     categoryId: string
     userid: string
+    disableAutoRemove: boolean
 }
 
 // Response schemas

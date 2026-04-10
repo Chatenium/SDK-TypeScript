@@ -81,6 +81,7 @@ export class BroadcastChannelService {
                 networkId: this.networkId,
                 connId: WebSocketHandler.getInstance().connId,
                 categoryId: this.categoryId,
+                disableAutoRemove: true
             });
             return
         } catch (e) {

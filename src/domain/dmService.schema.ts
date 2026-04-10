@@ -58,6 +58,7 @@ export interface JoinWsRoomReq {
     connId: string
     chatid: string
     userid: string
+    disableAutoRemove: boolean
 }
 
 // Response schemas

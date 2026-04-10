@@ -863,6 +863,7 @@ export class NetworkService {
                 userid: this.userid,
                 networkId: this.networkId,
                 connId: connId,
+                disableAutoRemove: true
             });
             return
         } catch (e) {

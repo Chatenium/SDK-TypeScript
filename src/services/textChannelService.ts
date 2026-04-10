@@ -269,6 +269,7 @@ export class TextChannelServiceService {
                 categoryId: this.categoryId,
                 userid: this.userid,
                 connId: WebSocketHandler.getInstance().connId,
+                disableAutoRemove: true
             });
             return
         } catch (e) {

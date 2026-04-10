@@ -17,6 +17,7 @@ export interface JoinWebsocketRoomReq {
     channelId: string
     networkId: string
     categoryId: string
+    disableAutoRemove: boolean
 }
 
 export interface StreamRegistry {

@@ -255,6 +255,7 @@ export interface JoinWebSocketRoomReq {
     userid: string
     connId: string
     networkId: string
+    disableAutoRemove: boolean
 }
 
 export interface GetFromInviteReq {
