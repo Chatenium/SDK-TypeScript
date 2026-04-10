@@ -5,18 +5,11 @@ export interface SDKConfig {
 }
 
 declare const process: any;
-declare const require: any;
 
 const isNode =
     typeof process !== 'undefined' &&
     typeof process.versions !== 'undefined' &&
     typeof process.versions.node !== 'undefined';
-
-if (isNode) {
-    try {
-        require('dotenv').config();
-    } catch { }
-}
 
 const getEnv = (key: string): string | undefined => {
     if (!isNode) return undefined;

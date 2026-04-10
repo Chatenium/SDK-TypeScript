@@ -45,13 +45,11 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Create .env file
-        run: |
-          echo "API_URL=http://api:3000" >> .env
-          echo "CDN_URL=http://cdn:4000" >> .env
-          echo "WS_URL=ws://api:3000" >> .env
-
       - name: Run Vitest
+        env:
+          API_URL: http://api:3000
+          CDN_URL: http://cdn:4000
+          WS_URL: ws://api:3000
         run: |
           npm install
           npm test --experimental-websocket
