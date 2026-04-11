@@ -263,7 +263,7 @@ export class TextChannelServiceService {
      */
     async joinWebSocketRoom(): Promise<void> {
         try {
-            const resp = await this.client.patch("v2/network/channel/joinWebSocketRoom", <JoinWsRoomReq>{
+            const resp = await this.client.post("v2/network/channel/joinWebSocketRoom", <JoinWsRoomReq>{
                 networkId: this.networkId,
                 channelId: this.channelId,
                 categoryId: this.categoryId,
