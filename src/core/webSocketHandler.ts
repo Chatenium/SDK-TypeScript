@@ -43,6 +43,13 @@ export class WebSocketHandler {
             this.connection = new WebSocket(`${environment.get().wsUrl}/v2/ws?userid=${userid}&access_token=${resp.data.token}`)
             console.log("Connected to websocket successfully")
             this.startListening()
+
+            this.connection.onclose = () => {
+                console.error("The WebSocket connection was closed unexpectedly. Reconnecting...")
+                setTimeout(() => {
+                    this.connect(userid, token)
+                }, 3000)
+            }
             return
         } catch (e) {
             console.log(e)
