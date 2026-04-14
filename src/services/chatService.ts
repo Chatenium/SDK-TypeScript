@@ -58,7 +58,7 @@ export class ChatService {
         }
     }
 
-    async getQuick(): Promise<Message[]> {
+    async getQuick(): Promise<Chat[]> {
         const chats = await this.database.get("chats", this.userid)
         if (chats) {
             return JSON.parse(chats)

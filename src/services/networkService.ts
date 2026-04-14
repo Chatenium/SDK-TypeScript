@@ -108,7 +108,7 @@ export class NetworkService {
         }
     }
 
-    async getQuick(): Promise<Message[]> {
+    async getQuick(): Promise<Network[]> {
         const networks = await this.database.get("networks", this.userid)
         if (networks) {
             return JSON.parse(networks)
