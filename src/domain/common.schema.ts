@@ -24,5 +24,5 @@ export interface Attachment {
     path: string
     height: number
     width: number
-    extraMetaData: Record<string, string> // Used by clients
+    extraMetaData: Record<string, any> // Used by clients
 }
