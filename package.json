@@ -23,6 +23,7 @@
     "README.md",
     "LICENSE"
   ],
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
