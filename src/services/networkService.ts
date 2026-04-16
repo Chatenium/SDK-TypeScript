@@ -711,14 +711,18 @@ export class NetworkService {
 
     /**
      * Uploads a new network picture
-     * @param picId
+     * @param isImage
+     * @param image
+     * @param colors
      */
-    async uploadNewPic(picId: string): Promise<void> {
+    async uploadNewPic(isImage: boolean, image: string | null, colors: RGB | null): Promise<void> {
         try {
-            await this.client.patch<PublicUserData[]>("network/uploadNewPic", <UploadNewPictureReq>{
+            await this.client.patch<PublicUserData[]>("v2/network/uploadNewPic", <UploadNewPictureReq>{
                 userid: this.userid,
                 networkId: this.networkId,
-                picId: picId,
+                data: image,
+                isImage: isImage,
+                monogramColors: colors
             });
             return
         } catch (e) {

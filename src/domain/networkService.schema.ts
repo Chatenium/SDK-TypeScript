@@ -208,9 +208,11 @@ export interface GetMembersReq {
 }
 
 export interface UploadNewPictureReq {
-    picId: string
     userid: string
     networkId: string
+    data: string
+    isImage: boolean
+    monogramColors: RGB | null
 }
 
 export interface ChangeVisibilityReq {
