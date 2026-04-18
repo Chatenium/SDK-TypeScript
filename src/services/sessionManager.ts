@@ -100,21 +100,23 @@ export class SessionManager {
      * Validates and updates all sessions and returns with a new session list
      * @param sessions
      */
-    updateSessions(sessions: Session[]): Session[] {
-        sessions.forEach(async session => {
-            const index = sessions.indexOf(session)
+    async updateSessions(sessions: Session[]): Promise<Session[]> {
+        const activeSessions: Session[] = [];
+
+        for (const session of sessions) {
             if (!await this.validateSession(session.token)) {
-                this.database.delete("sessions", session.userData.userid)
-                this.keyring.delete(session.userData.userid)
-                sessions.splice(index, 1)
+                this.database.delete("sessions", session.userData.userid);
+                this.keyring.delete(session.userData.userid);
+                console.warn(`Validating session for user ${session.userData.userid} failed. Deleting session...`)
+                continue;
             }
 
-            const updatedUserData = await this.updateUserData(session)
-            this.database.set("sessions", session.userData.userid, updatedUserData)
-            sessions[index] = updatedUserData
-        })
+            const updatedUserData = await this.updateUserData(session);
+            this.database.set("sessions", session.userData.userid, updatedUserData);
+            activeSessions.push(updatedUserData);
+        }
 
-        return sessions
+        return activeSessions;
     }
 
     private async validateSession(token: string): Promise<boolean> {
