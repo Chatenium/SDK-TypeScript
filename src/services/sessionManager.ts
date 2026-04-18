@@ -112,7 +112,7 @@ export class SessionManager {
             }
 
             const updatedUserData = await this.updateUserData(session);
-            this.database.set("sessions", session.userData.userid, updatedUserData);
+            this.database.set("sessions", session.userData.userid, JSON.stringify(updatedUserData.userData));
             activeSessions.push(updatedUserData);
         }
 
