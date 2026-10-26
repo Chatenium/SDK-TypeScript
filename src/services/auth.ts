@@ -21,4 +21,42 @@ export class AuthChallenge {
         this.challenge = resp.data;
         return resp.data;
     }
+
+    /**
+     * Starts a new challenge for the provided endpoint
+     * @param name Name of the factor to verify (Example: SMS, EMAIL, PASSWORD)
+     * @param credential The credential to verify the factor (SMS code, password, etc...)
+     */
+    async verifyFactor(name: string, credential: string): Promise<Challenge> {
+        if (this.challenge === undefined) {
+            throw new Error("Challenge not started");
+        } else {
+            const resp = await this.authApi.verifyFactor({
+                challengeId: this.challenge.challengeId,
+                factorName: name,
+                credential: credential
+            })
+
+            this.challenge = resp.data;
+            return resp.data;
+        }
+    }
+
+    /**
+     * Requests the credential for a specific factor when it's not static like a password (E-mail, SMS)
+     * @param name Name of the factor to verify (Example: SMS, EMAIL)
+     */
+    async requestCredential(name: string): Promise<Challenge> {
+        if (this.challenge === undefined) {
+            throw new Error("Challenge not started");
+        } else {
+            const resp = await this.authApi.requestCredential({
+                challengeId: this.challenge.challengeId,
+                factorName: name,
+            })
+
+            this.challenge = resp.data;
+            return resp.data;
+        }
+    }
 }
