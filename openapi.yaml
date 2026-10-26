@@ -1,0 +1,3865 @@
+openapi: 3.0.0
+info:
+  title: Chatenium API
+  version: 3.0.0
+  description: OpenAPI specifications for Chatenium API
+servers:
+  - url: http://localhost:3000/v3
+  - url: https://api.chatenium.hu/v3
+paths:
+  /ws:
+    get:
+      path: /websocket
+      tags:
+        - WebSocket
+      summary: WebSocket upgrade
+      operationId: websocket
+      parameters:
+        - $ref: '#/components/parameters/WsAccessTokenQuery'
+      responses:
+        '101':
+          description: Upgrade successful
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /auth/rotate:
+    patch:
+      tags:
+        - Auth
+      summary: Rotate token pair
+      description: Called when the access token expires. Generates a new pair of tokens and returns them to the user.
+      operationId: rotateTokenPair
+      parameters:
+        - $ref: '#/components/parameters/RefreshTokenHeader'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulAuthResp'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /auth/oauth/apple:
+    post:
+      tags:
+        - Auth
+      description: Authenticate using Apple.
+      summary: Apple OAuth
+      operationId: oauthApple
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppleOAuthReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulAuthResp'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /auth/oauth/google:
+    post:
+      tags:
+        - Auth
+      description: Authenticate using Google.
+      summary: Google OAuth
+      operationId: oauthGoogle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoogleOAuthReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulAuthResp'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /auth/usage/username:
+    get:
+      tags:
+        - Auth
+      description: Fetches whether the specified username is available or not.
+      summary: Username Availability
+      operationId: usernameUsage
+      parameters:
+        - $ref: '#/components/parameters/UsernameQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataAvailabilityResp'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /auth/usage/email:
+    get:
+      tags:
+        - Auth
+      description: Fetches whether the specified e-mail address is available or not.
+      summary: Email Availability
+      operationId: emailUsage
+      parameters:
+        - $ref: '#/components/parameters/EmailQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataAvailabilityResp'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /auth/signIn:
+    post:
+      tags:
+        - Auth
+      description: Signs in the user and returns an access/refresh token pair + the user's ID.
+      summary: Sign In
+      operationId: signIn
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInReq'
+      parameters:
+        - $ref: '#/components/parameters/AuthIdentityToken'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulAuthResp'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /auth/ple:
+    post:
+      tags:
+        - Auth
+      description: 'Passwordless Registration: Registers a new user without a password. The user will need to provide a temporary code on every authentication.'
+      summary: Passwordless Registration
+      operationId: passwordlessRegistration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordlessRegisterReq'
+      parameters:
+        - $ref: '#/components/parameters/AuthIdentityToken'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulAuthResp'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      description: Validates the provided user data, registers them in the database and signs the user in.
+      summary: Register
+      operationId: register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulAuthResp'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /auth/passReset:
+    post:
+      tags:
+        - Auth
+      description: Verifies the provided token and updates the user's password. The user does not get signed in automatically.
+      summary: Password Reset
+      operationId: passwordReset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetReq'
+      parameters:
+        - $ref: '#/components/parameters/AuthIdentityToken'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /auth/challenge:
+    post:
+      tags:
+        - Auth
+      description: Registers a new challenge challenge attempt.
+      summary: Register Challenge
+      operationId: registerChallenge
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterAuthAttemptReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Challenge'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    patch:
+      tags:
+        - Auth
+      description: With the submitted credential, an attempt will be made to verify one factor.
+      summary: Credential Verification
+      operationId: verifyFactor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyFactorReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Challenge'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /auth/challenge/requestCredential:
+    post:
+      tags:
+        - Auth
+      description: Requests a credential for specific factors (SMS, E-Mail).
+      summary: Request credential
+      operationId: requestCredential
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestFactorCredentialReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Challenge'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /auth/userIdFromIdentity:
+    get:
+      tags:
+        - Auth
+      description: Fetches the user's ID from the provided identity.
+      summary: Fetch User ID
+      operationId: getIdFromIdentity
+      parameters:
+        - $ref: '#/components/parameters/IdentityQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetIdFromIdentityResp'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /account/personalUserData:
+    get:
+      tags:
+        - Account
+      summary: Get user data (including extra data)
+      operationId: getPersonalUserData
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalUserData'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /account/push/registerFirebase:
+    post:
+      tags:
+        - Account
+      summary: Register FCM Token
+      operationId: registerFcmToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterFcmTokenReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /account/push/registerApple:
+    post:
+      tags:
+        - Account
+      summary: Register APNS Token
+      operationId: registerApnsToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterApnsTokenReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /account/profile/username:
+    patch:
+      tags:
+        - Account
+      summary: Change Username
+      operationId: changeUsername
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeUsernameReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /account/profile/displayName:
+    patch:
+      tags:
+        - Account
+      summary: Change Display Name
+      operationId: changeDisplayName
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeDisplayNameReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /account:
+    delete:
+      tags:
+        - Account
+      summary: Delete Account
+      operationId: deleteAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteAccountReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /account/security/email:
+    patch:
+      tags:
+        - Account
+      summary: Change Email
+      operationId: changeEmail
+      parameters:
+        - $ref: '#/components/parameters/AuthIdentityToken'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /account/sessions:
+    get:
+      tags:
+        - Account
+      summary: Get Sessions
+      operationId: getSessions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SessionV3'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /account/session/{sessionId}:
+    delete:
+      tags:
+        - Account
+      summary: Logout Session
+      operationId: logoutSession
+      parameters:
+        - $ref: '#/components/parameters/SessionIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /account/gifs:
+    patch:
+      tags:
+        - Account
+      summary: Toggle GIF Save
+      operationId: toggleGifSave
+      parameters:
+        - name: url
+          in: query
+          description: URL of the GIF (Can be inside/outside of Chatenium)
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToggleGifReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /account/security/phone:
+    patch:
+      tags:
+        - Account
+      summary: Change Phone Number
+      operationId: changePhoneNumber
+      parameters:
+        - $ref: '#/components/parameters/AuthIdentityToken'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /account/pfp/upload/register:
+    post:
+      tags:
+        - Account
+      summary: Register PFP Upload
+      operationId: registerPfpUpload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/S3PresignedFileReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/S3PresignedFileResponse'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /account/pfp:
+    patch:
+      tags:
+        - Account
+      summary: Complete PFP Upload
+      operationId: completePfpUpload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompletePfpUploadReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /calls/{roomId}:
+    get:
+      tags:
+        - Call
+      summary: Get access
+      description: Gathers TURN and STUN servers and a LiveKit token for a successful WebRTC connection
+      operationId: getRtcAccess
+      parameters:
+        - $ref: '#/components/parameters/RoomIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAccessResp'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /calls/{roomId}/{userId}:
+    post:
+      tags:
+        - Call
+      summary: Invite partner
+      description: '**You cannot invite network members, only chat partners!** Invites your chat partner to join the call. The user will be notified about the call by various PUSH notification systems.'
+      operationId: invitePartner
+      parameters:
+        - $ref: '#/components/parameters/InvitePartnerQuery'
+        - $ref: '#/components/parameters/RoomIdParam'
+        - $ref: '#/components/parameters/InvitePartnerIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /contacts:
+    get:
+      tags:
+        - Contacts
+      summary: Get contacts
+      description: Fetches each contact that is associated with the user ordered by the last time a message was sent.
+      operationId: getContacts
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Contact'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    post:
+      tags:
+        - Contacts
+      summary: Create new contact
+      description: Sends a request to the specified partner who can either accept the request by sending you a message or ignore it.
+      operationId: newContact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddContactReq'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /contacts/{contactId}:
+    patch:
+      tags:
+        - Contacts
+      summary: Mute contact
+      description: When muted, you will not receive notifications from the contact.
+      operationId: setContactMute
+      parameters:
+        - $ref: '#/components/parameters/ContactIdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetMuteReq'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    delete:
+      tags:
+        - Contacts
+      summary: Delete contact
+      operationId: deleteContact
+      description: Deletes the contact from your contacts list and removes all DMs with the contact.
+      parameters:
+        - $ref: '#/components/parameters/ContactIdParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /dms/{contactId}:
+    delete:
+      tags:
+        - Direct messaging
+      summary: Delete message(s)
+      description: Deletes the specified message(s)
+      operationId: deleteMessage
+      parameters:
+        - $ref: '#/components/parameters/ContactIdParam'
+        - $ref: '#/components/parameters/MessageIdsQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    get:
+      tags:
+        - Direct messaging
+      summary: Get
+      description: Fetches all messages inside the chat
+      operationId: getMessages
+      parameters:
+        - $ref: '#/components/parameters/ContactIdParam'
+        - $ref: '#/components/parameters/SkipQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    post:
+      tags:
+        - Direct messaging
+      summary: Send message
+      description: Sends a new message into the chat
+      operationId: sendMessage
+      parameters:
+        - $ref: '#/components/parameters/ContactIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMessageReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /dms/{contactId}/pin:
+    get:
+      tags:
+        - Direct messaging
+      summary: Pinned messages
+      description: Gets all pinned messages inside the chat
+      operationId: getPinnedMessages
+      parameters:
+        - $ref: '#/components/parameters/ContactIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PinnedMessage'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    post:
+      tags:
+        - Direct messaging
+      summary: Pin message
+      description: Pins the specified message
+      operationId: pinMessage
+      parameters:
+        - $ref: '#/components/parameters/ContactIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PinMessageReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /dms/{contactId}/pin/{messageId}:
+    delete:
+      tags:
+        - Direct messaging
+      summary: Unpin message
+      description: Unpins the specified message
+      operationId: unpinMessage
+      parameters:
+        - $ref: '#/components/parameters/ContactIdParam'
+        - $ref: '#/components/parameters/MessageIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /dms/{contactId}/{messageId}:
+    patch:
+      tags:
+        - Direct messaging
+      summary: Edit message
+      description: Edits the content of the specified message
+      operationId: editMessage
+      parameters:
+        - $ref: '#/components/parameters/ContactIdParam'
+        - $ref: '#/components/parameters/MessageIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditMessageReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    get:
+      tags:
+        - Direct messaging
+      summary: Get position
+      description: Gets the position of a message which can be passed as query param in get to load that section of messages
+      operationId: getMessagePosition
+      parameters:
+        - $ref: '#/components/parameters/ContactIdParam'
+        - $ref: '#/components/parameters/MessageIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPositionResp'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /dms/{contactId}/upload/register:
+    post:
+      tags:
+        - Direct messaging
+      summary: Register attachment(s) upload
+      description: Registers the upload(s) and returns necessary data to complete the actual upload
+      operationId: registerAttachmentUploads
+      parameters:
+        - $ref: '#/components/parameters/ContactIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/S3PresignedFileReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/S3PresignedMultiResp'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /dms/{contactId}/upload/complete:
+    post:
+      tags:
+        - Direct messaging
+      summary: Complete attachment upload
+      description: Marks the upload as completed. After that the fileId can be provided when sending a message.
+      operationId: completeAttachmentUpload
+      parameters:
+        - $ref: '#/components/parameters/ContactIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/S3FinishMultiReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /fileTrans:
+    post:
+      tags:
+        - File transfer
+      summary: Start new
+      description: Starts a new file transfer with the specified user. The 2 users must have each other in their contacts
+      operationId: startNewFileTransfer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartNewReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartNewResp'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /fileTrans/{transferId}:
+    patch:
+      tags:
+        - File transfer
+      summary: Accept
+      description: Accepts the file transfer and allows to establish a WebRTC connection
+      operationId: acceptFileTransfer
+      parameters:
+        - $ref: '#/components/parameters/TransferIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RTCConfiguration'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    delete:
+      tags:
+        - File transfer
+      summary: Decline
+      description: Declines the file transfer
+      operationId: declineFileTransfer
+      parameters:
+        - $ref: '#/components/parameters/TransferIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /fileTrans/{transferId}/rtc/offer:
+    post:
+      tags:
+        - File transfer
+      summary: WebRTC Offer SDP
+      description: Sends the WebRTC Offer SDP **(Sender Only)**
+      operationId: fileTransferSendRtcOffer
+      parameters:
+        - $ref: '#/components/parameters/TransferIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RTCSendOfferReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /fileTrans/{transferId}/rtc/answer:
+    post:
+      tags:
+        - File transfer
+      summary: WebRTC Answer SDP
+      description: Sends the WebRTC Answer SDP **(Receiver Only)**
+      operationId: fileTransferSendRtcAnswer
+      parameters:
+        - $ref: '#/components/parameters/TransferIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RTCSendAnswerReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /fileTrans/{transferId}/rtc/candidate:
+    post:
+      tags:
+        - File transfer
+      summary: WebRTC ICE Candidate
+      description: Sends the WebRTC ICE Candidate **(Receiver and Sender)**
+      operationId: fileTransferSendRtcCandidate
+      parameters:
+        - $ref: '#/components/parameters/TransferIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RTCSendCandidateReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/picture/register:
+    post:
+      tags:
+        - Cascade
+      summary: Register new picture upload
+      description: Returns credentials to upload a new cascade picture.
+      operationId: registerCascadePictureUpload
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+      requestBody:
+        content:
+          application/schema:
+            schema:
+              $ref: '#/components/schemas/S3PresignedFileReq'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/S3PresignedFileResponse'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /network/{cascadeId}/picture:
+    patch:
+      tags:
+        - Cascade
+      summary: Complete Cascade Picture Upload
+      operationId: completeCascadePictureUpload
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompletePicUploadReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /networks:
+    post:
+      tags:
+        - Cascade
+      summary: Create new
+      description: Creates a new cascade with the provided data
+      operationId: createCascade
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCascadeReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cascade'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    get:
+      tags:
+        - Cascade
+      summary: Get
+      description: Gets all cascades that the user owns or a member of
+      operationId: getCascades
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cascade'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}:
+    delete:
+      tags:
+        - Cascade
+      summary: Leave/Delete
+      description: Deletes or leaves the cascade based on whether the users owns the cascade or not
+      operationId: leaveOrDeleteCascade
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/members:
+    delete:
+      tags:
+        - Cascade
+      summary: Get members
+      description: Fetches all members in the cascade
+      operationId: getMembers
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailedMemberList'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/members/{memberId}:
+    delete:
+      tags:
+        - Cascade
+      summary: Kick/Ban member
+      description: Kicks or bans a member based on what the client chose
+      operationId: kickOrBanMember
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/MemberIdParam'
+        - $ref: '#/components/parameters/KickBanQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/bans:
+    get:
+      tags:
+        - Cascade
+      summary: Get bans
+      description: Fetches all banned members
+      operationId: getBannedMembers
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ban'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/bans/{memberId}:
+    delete:
+      tags:
+        - Cascade
+      summary: Unban member
+      description: Unbans the specified member
+      operationId: unbanMember
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/MemberIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/discovery:
+    get:
+      tags:
+        - Cascade
+      summary: Discovery
+      description: Fetches all public cascades with small insights
+      operationId: cascadeDiscovery
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DiscoveryCascade'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/fromInvite/{inviteId}:
+    get:
+      tags:
+        - Cascade
+      summary: Get from invite
+      description: Fetches the cascade's data that the invite is valid for
+      operationId: getCascadeFromInvite
+      parameters:
+        - $ref: '#/components/parameters/InviteIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cascade'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/join/fromInvite:
+    post:
+      tags:
+        - Cascade
+      summary: Join from invite
+      description: Joins the cascade with a valid invite
+      operationId: joinCascadeFromInvite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JoinFromInviteReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cascade'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/join/public:
+    post:
+      tags:
+        - Cascade
+      summary: Join public
+      description: Joins the public cascade
+      operationId: joinPublicCascade
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JoinPublicReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cascade'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/name:
+    patch:
+      tags:
+        - Cascade
+      summary: Edit name
+      description: Sets a new name for the cascade
+      operationId: editCascadeName
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditNameReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/visibility:
+    patch:
+      tags:
+        - Cascade
+      summary: Change visibility
+      description: Changes the visibility of the cascade
+      operationId: changeCascadeVisibility
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeVisibility'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /networks/{cascadeId}/invites:
+    post:
+      tags:
+        - Cascade Invite
+      summary: Create new
+      description: Creates a new invite to the cascade
+      operationId: createInvite
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateInviteReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CascadeInvite'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    get:
+      tags:
+        - Cascade Invite
+      summary: Get invites
+      description: Fetches all invites to the cascade
+      operationId: getInvites
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CascadeInvite'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /networks/{cascadeId}/invites/{inviteId}:
+    delete:
+      tags:
+        - Cascade Invite
+      summary: Revoke invite
+      description: Revokes the new invite from the cascade
+      operationId: revokeInvite
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/InviteIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    patch:
+      tags:
+        - Cascade Invite
+      summary: (un)Pause invite
+      description: (un)Pauses the specified invite
+      operationId: toggleInvitePause
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/InviteIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PauseInviteReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/threads:
+    post:
+      tags:
+        - Thread
+      summary: Start a new thread
+      description: Starts a new thread inside the cascade
+      operationId: startThread
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartNewThreadReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    get:
+      tags:
+        - Cascade
+      summary: Get threads
+      description: Fetches all threads from a specific parent (For root threads use null as parentId)
+      operationId: getThreads
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/ParentIdQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Thread'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/threads/{threadId}:
+    delete:
+      tags:
+        - Thread
+      summary: Close thread
+      description: Deletes the specified thread and all subthreads
+      operationId: closeThread
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/ThreadIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    patch:
+      tags:
+        - Thread
+      summary: Update thread
+      description: Updates the thread
+      operationId: updateThread
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/ThreadIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartNewThreadReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/threads/{threadId}/messages/:
+    delete:
+      tags:
+        - Thread Messages
+      summary: Delete message(s)
+      description: Deletes the specified message(s)
+      operationId: TMDeleteMessage
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/ThreadIdParam'
+        - $ref: '#/components/parameters/MessageIdsQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    get:
+      tags:
+        - Thread Messages
+      summary: Get
+      description: Fetches all messages inside the chat
+      operationId: TMGetMessages
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/ThreadIdParam'
+        - $ref: '#/components/parameters/SkipQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ThreadMessage'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    post:
+      tags:
+        - Thread Messages
+      summary: Send message
+      description: Sends a new message into the thread
+      operationId: TMSendMessage
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/ThreadIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TMSendMessageReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThreadMessage'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/threads/{threadId}/messages/pin:
+    get:
+      tags:
+        - Thread Messages
+      summary: Pinned messages
+      description: Gets all pinned messages inside the thread
+      operationId: TMGetPinnedMessages
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/ThreadIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    post:
+      tags:
+        - Thread Messages
+      summary: Pin message
+      description: Pins the specified message
+      operationId: TMPinMessage
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/ThreadIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TMPinMessageReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/threads/{threadId}/messages/pin/{messageId}:
+    delete:
+      tags:
+        - Thread Messages
+      summary: Unpin message
+      description: Unpins the specified message
+      operationId: TMUnpinMessage
+      parameters:
+        - $ref: '#/components/parameters/ThreadIdParam'
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/MessageIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/threads/{threadId}/messages/{messageId}:
+    patch:
+      tags:
+        - Thread Messages
+      summary: Edit message
+      description: Edits the content of the specified message
+      operationId: TMEditMessage
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/ThreadIdParam'
+        - $ref: '#/components/parameters/MessageIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TMEditMessageReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    get:
+      tags:
+        - Thread Messages
+      summary: Get position
+      description: Gets the position of a message which can be passed as query param in get to load that section of messages
+      operationId: TMGetMessagePosition
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/ThreadIdParam'
+        - $ref: '#/components/parameters/MessageIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TMGetPositionResp'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/threads/{threadId}/messages/upload/register:
+    post:
+      tags:
+        - Direct messaging
+      summary: Register attachment(s) upload
+      description: Registers the upload(s) and returns necessary data to complete the actual upload
+      operationId: TMRegisterAttachmentUploads
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/ThreadIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/S3PresignedFileReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/S3PresignedMultiResp'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/threads/{threadId}/messages/upload/complete:
+    post:
+      tags:
+        - Direct messaging
+      summary: Complete attachment upload
+      description: Marks the upload as completed. After that the fileId can be provided when sending a message.
+      operationId: TMCompleteAttachmentUpload
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/ThreadIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/S3FinishMultiReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/ranks:
+    post:
+      tags:
+        - Ranks
+      summary: Create rank
+      description: Creates a new cascade rank
+      operationId: createRank
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RankCreateOrUpdateReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rank'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/ranks/{rankId}:
+    patch:
+      tags:
+        - Ranks
+      summary: Update rank
+      description: Updates the specified rank
+      operationId: updateRank
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/RankIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RankCreateOrUpdateReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    delete:
+      tags:
+        - Ranks
+      summary: Delete rank
+      description: Deletes the specified rank
+      operationId: deleteRank
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/RankIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/ranks/{rankId}/permissions:
+    patch:
+      tags:
+        - Ranks
+      summary: Update rank permissions
+      description: Updates the specified rank's permissions
+      operationId: updateRankPermissions
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/RankIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRankPermissionReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /cascades/{cascadeId}/ranks/{rankId}/assignment:
+    patch:
+      tags:
+        - Ranks
+      summary: Update member rank assignment
+      description: Assigns a rank to the member or revokes the rank from the member
+      operationId: manageRankAssignment
+      parameters:
+        - $ref: '#/components/parameters/CascadeIdParam'
+        - $ref: '#/components/parameters/RankIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManageRankAssignmentReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /pictures/{creatorId}/follow:
+    patch:
+      tags:
+        - Pictures creator
+      summary: Follow
+      description: (un)follows the creator
+      operationId: unorfollowCreator
+      parameters:
+        - $ref: '#/components/parameters/CreatorIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnOrFollowCreatorReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /pictures/{creatorId}/details:
+    get:
+      tags:
+        - Pictures creator
+      summary: Details
+      description: Fetches user data and albums/pictures count
+      operationId: creatorDetails
+      parameters:
+        - $ref: '#/components/parameters/CreatorIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Creator'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /pictures/{creatorId}/discoveryParticipation:
+    patch:
+      tags:
+        - Pictures creator
+      summary: Discovery participation
+      description: Toggles whether the user's uploads should be included in discovery
+      operationId: creatorDiscoveryParticipation
+      parameters:
+        - $ref: '#/components/parameters/CreatorIdParam'
+      requestBody:
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ToggleDiscoveryParticipationReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /pictures/{creatorId}:
+    get:
+      tags:
+        - Pictures
+      summary: Get pictures
+      description: Fetches pictures uploaded to a specific album. If albumId is not provided then pictures uploaded without an album will be fetched.
+      operationId: getPictures
+      parameters:
+        - $ref: '#/components/parameters/CreatorIdParam'
+        - $ref: '#/components/parameters/AlbumIdQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Picture'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    post:
+      tags:
+        - Pictures
+      summary: Upload pictures
+      description: Registers are uploaded pictures in the database.
+      operationId: uploadPictures
+      parameters:
+        - $ref: '#/components/parameters/CreatorIdParam'
+      requestBody:
+        content:
+          application/schema:
+            schema:
+              $ref: '#/components/schemas/UploadPicturesReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /pictures/{creatorId}/register:
+    post:
+      tags:
+        - Pictures
+      summary: Register picture uploads
+      description: Returns credentials to upload a set amount of pictures.
+      operationId: registerPictureUploads
+      parameters:
+        - $ref: '#/components/parameters/CreatorIdParam'
+      requestBody:
+        content:
+          application/schema:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/S3PresignedFileReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/S3PresignedFileResponse'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /pictures/{creatorId}/{pictureId}:
+    delete:
+      tags:
+        - Pictures
+      summary: Delete picture
+      description: Deletes the specified picture.
+      operationId: deletePicture
+      parameters:
+        - $ref: '#/components/parameters/CreatorIdParam'
+        - $ref: '#/components/parameters/PictureIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    patch:
+      tags:
+        - Pictures
+      summary: Edit picture
+      description: Modifies the specified picture.
+      operationId: editPicture
+      parameters:
+        - $ref: '#/components/parameters/CreatorIdParam'
+        - $ref: '#/components/parameters/PictureIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditPictureReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /pictures/{creatorId}/{pictureId}/like:
+    patch:
+      tags:
+        - Pictures
+      summary: Like picture
+      description: (dis)Likes the specified picture.
+      operationId: likePicture
+      parameters:
+        - $ref: '#/components/parameters/CreatorIdParam'
+        - $ref: '#/components/parameters/PictureIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LikePictureReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /pictures/discovery:
+    get:
+      tags:
+        - Pictures
+      summary: Discovery
+      description: Fetches all recent and most liked public pictures.
+      operationId: pictureDiscovery
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoveryResp'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /pictures/{creatorId}/{pictureId}/comments:
+    post:
+      tags:
+        - Picture comments
+      summary: Post comment
+      description: Posts a new comment under the specified picture.
+      operationId: postPictureComment
+      parameters:
+        - $ref: '#/components/parameters/CreatorIdParam'
+        - $ref: '#/components/parameters/PictureIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostCommentReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    get:
+      tags:
+        - Picture comments
+      summary: Get comments
+      description: Fetches all comments under the specified picture.
+      operationId: getPictureComments
+      parameters:
+        - $ref: '#/components/parameters/CreatorIdParam'
+        - $ref: '#/components/parameters/PictureIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /pictures/{creatorId}/{pictureId}/comments/{commentId}:
+    patch:
+      tags:
+        - Picture comments
+      summary: Edit comment
+      description: Updates the content of the specified comment.
+      operationId: editPictureComment
+      parameters:
+        - $ref: '#/components/parameters/CreatorIdParam'
+        - $ref: '#/components/parameters/PictureIdParam'
+        - $ref: '#/components/parameters/CommentIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditCommentReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    delete:
+      tags:
+        - Picture comments
+      summary: Delete comment
+      description: Deletes the specified comment.
+      operationId: deletePictureComments
+      parameters:
+        - $ref: '#/components/parameters/CreatorIdParam'
+        - $ref: '#/components/parameters/PictureIdParam'
+        - $ref: '#/components/parameters/CommentIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /pictures/{creatorId}/albums:
+    post:
+      tags:
+        - Picture album
+      summary: Create new
+      description: Creates a new album
+      operationId: createAlbum
+      parameters:
+        - $ref: '#/components/parameters/CreatorIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAlbumReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Album'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    get:
+      tags:
+        - Picture album
+      summary: Get
+      description: Gets all albums
+      operationId: getAlbums
+      parameters:
+        - $ref: '#/components/parameters/CreatorIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Album'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+  /pictures/{creatorId}/albums/{albumId}:
+    delete:
+      tags:
+        - Picture album
+      summary: Delete
+      description: Deletes the specified album
+      operationId: deleteAlbum
+      parameters:
+        - $ref: '#/components/parameters/CreatorIdParam'
+        - $ref: '#/components/parameters/AlbumIdParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+    patch:
+      tags:
+        - Picture album
+      summary: Edit
+      description: Modifies the specified album's data
+      operationId: editAlbum
+      parameters:
+        - $ref: '#/components/parameters/CreatorIdParam'
+        - $ref: '#/components/parameters/AlbumIdParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditAlbumReq'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericSuccessBody'
+        '400':
+          $ref: '#/components/responses/ErrorBody'
+        '500':
+          $ref: '#/components/responses/ErrorBody'
+components:
+  parameters:
+    WsAccessTokenQuery:
+      name: wsAccessToken
+      in: query
+      required: true
+      description: A JWT token used to authorize the websocket connection
+      schema:
+        type: string
+    RefreshTokenHeader:
+      name: X-Refresh-Token
+      in: header
+      description: A JWT token used for refreshing the access token
+      required: true
+      schema:
+        type: string
+    UsernameQuery:
+      name: username
+      in: query
+      required: true
+      description: Username
+      schema:
+        type: string
+    EmailQuery:
+      name: email
+      in: query
+      required: true
+      description: Email address
+      schema:
+        type: string
+    AuthIdentityToken:
+      name: Chtn-Auth-Identity-Token
+      in: header
+      description: A JWT token used for authentication
+      required: true
+      schema:
+        type: string
+    IdentityQuery:
+      name: identity
+      in: query
+      required: true
+      description: Username, e-mail address or phone number
+      schema:
+        type: string
+    SessionIdParam:
+      name: sessionId
+      in: path
+      required: true
+      schema:
+        type: string
+    RoomIdParam:
+      name: roomId
+      in: path
+      required: true
+      schema:
+        type: string
+    InvitePartnerQuery:
+      name: channelType
+      in: query
+      required: false
+      schema:
+        type: string
+    InvitePartnerIdParam:
+      name: userId
+      in: path
+      required: true
+      schema:
+        type: string
+    ContactIdParam:
+      name: contactId
+      in: path
+      required: true
+      schema:
+        type: string
+    SkipQuery:
+      name: skip
+      in: query
+      required: true
+      schema:
+        type: integer
+    MessageIdsQuery:
+      name: messageIds
+      description: Comma-separated list of messageIds
+      in: query
+      required: true
+      schema:
+        type: string
+    MessageIdParam:
+      name: messageId
+      in: path
+      required: true
+      schema:
+        type: string
+    TransferIdParam:
+      name: transferId
+      in: path
+      required: true
+      schema:
+        type: string
+    CascadeIdParam:
+      name: cascadeId
+      in: path
+      required: true
+      schema:
+        type: string
+    MemberIdParam:
+      name: memberId
+      in: path
+      required: true
+      schema:
+        type: string
+    KickBanQuery:
+      name: ban
+      in: query
+      required: false
+      schema:
+        type: boolean
+    InviteIdParam:
+      name: inviteId
+      in: path
+      required: true
+      schema:
+        type: string
+    ParentIdQuery:
+      name: parentId
+      in: query
+      required: false
+      schema:
+        type: string
+    ThreadIdParam:
+      name: threadId
+      in: path
+      required: true
+      schema:
+        type: string
+    RankIdParam:
+      name: rankId
+      in: path
+      required: true
+      schema:
+        type: string
+    CreatorIdParam:
+      name: creatorId
+      in: path
+      required: true
+      schema:
+        type: string
+    AlbumIdQuery:
+      name: albumId
+      in: query
+      required: true
+      schema:
+        type: string
+    PictureIdParam:
+      name: pictureId
+      in: path
+      required: true
+      schema:
+        type: string
+    CommentIdParam:
+      name: commentId
+      in: path
+      required: true
+      schema:
+        type: string
+    AlbumIdParam:
+      name: albumId
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    SuccessfulAuthResp:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        userId:
+          type: string
+      required:
+        - accessToken
+        - refreshToken
+        - userId
+    AppleOAuthReq:
+      type: object
+      properties:
+        code:
+          type: string
+          description: The authorization code that is returned from Apple's authentication flow
+        os:
+          type: string
+          description: The Operating System of the device that is accessing Chatenium
+        frontend:
+          type: string
+          description: The application's name that is accessing Chatenium
+        isApple:
+          type: boolean
+          description: Whether the app is using Apple's native authentication flow (The app is Apple native) or the web flow (Web app or other non-native app)
+      required:
+        - code
+        - os
+        - frontend
+        - isApple
+    GoogleOAuthReq:
+      type: object
+      properties:
+        code:
+          type: string
+          description: The authorization code that is returned from Apple's authentication flow
+        os:
+          type: string
+          description: The Operating System of the device that is accessing Chatenium
+        frontend:
+          type: string
+          description: The application's name that is accessing Chatenium
+      required:
+        - code
+        - os
+        - frontend
+    DataAvailabilityResp:
+      description: Used in e-mail/username availability checks
+      type: object
+      properties:
+        used:
+          type: boolean
+      required:
+        - used
+    SignInReq:
+      type: object
+      properties:
+        os:
+          type: string
+          description: The Operating System of the device that is accessing Chatenium
+        frontend:
+          type: string
+          description: The application's name that is accessing Chatenium
+      required:
+        - os
+        - frontend
+    PasswordlessRegisterReq:
+      type: object
+      properties:
+        username:
+          type: string
+          description: A username picked by the user
+          x-oapi-codegen-extra-tags:
+            validate: required,min=3,max=16,alphanum
+        displayName:
+          type: string
+          description: A Display Name picked by the user
+          x-oapi-codegen-extra-tags:
+            validate: max=20
+        os:
+          type: string
+          description: The Operating System of the device that is accessing Chatenium
+        frontend:
+          type: string
+          description: The application's name that is accessing Chatenium
+      required:
+        - username
+        - displayName
+        - os
+        - frontend
+    RegisterReq:
+      description: Used to register a new user
+      type: object
+      properties:
+        username:
+          type: string
+          description: A username picked by the user
+          x-oapi-codegen-extra-tags:
+            validate: required,min=3,max=16,alphanum
+        displayName:
+          type: string
+          description: A Display Name picked by the user
+          x-oapi-codegen-extra-tags:
+            validate: max=20
+        password:
+          type: string
+          description: A password picked by the user
+          x-oapi-codegen-extra-tags:
+            validate: required,min=6
+        os:
+          type: string
+          description: The Operating System of the device that is accessing Chatenium
+        frontend:
+          type: string
+          description: The application's name that is accessing Chatenium
+      required:
+        - username
+        - displayName
+        - password
+        - os
+        - frontend
+    PasswordResetReq:
+      type: object
+      properties:
+        newPassword:
+          type: string
+          description: A new password that will be used for signing in
+          x-oapi-codegen-extra-tags:
+            validate: required,min=6
+      required:
+        - unameMailPhone
+        - code
+        - newPassword
+    GenericSuccessBody:
+      type: object
+      properties:
+        success:
+          type: boolean
+      required:
+        - success
+    ChallengeDataOverride:
+      type: object
+      properties:
+        email:
+          type: string
+        phone:
+          type: string
+    RegisterAuthAttemptReq:
+      type: object
+      properties:
+        userId:
+          type: string
+        actionName:
+          type: string
+        override:
+          $ref: '#/components/schemas/ChallengeDataOverride'
+      required:
+        - actionName
+    Factor:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          description: The status of the specific challenge method
+          example: pending
+          enum:
+            - PENDING
+            - SUCCESS
+            - TIMEOUT
+    Challenge:
+      type: object
+      required:
+        - challengeId
+        - minimumSteps
+        - factorsTracker
+      properties:
+        challengeId:
+          type: string
+          format: uuid
+          example: 4a289b70-1653-488f-9a1b-3652c71aef42
+        minimumSteps:
+          type: integer
+          description: Total number of challenge methods required to complete the challenge
+          example: 2
+        factorsTracker:
+          type: object
+          description: A map matching available authentication methods
+          additionalProperties:
+            $ref: '#/components/schemas/Factor'
+          example:
+            password:
+              status: PENDING
+            google:
+              status: SUCCESS
+            sms:
+              status: TIMEOUT
+    VerifyFactorReq:
+      type: object
+      properties:
+        factorName:
+          type: string
+        credential:
+          type: string
+        challengeId:
+          type: string
+      required:
+        - factorName
+        - challengeKey
+        - challengeId
+    RequestFactorCredentialReq:
+      type: object
+      properties:
+        factorName:
+          type: string
+        challengeId:
+          type: string
+      required:
+        - factorName
+        - challengeId
+    GetIdFromIdentityResp:
+      type: object
+      properties:
+        userId:
+          type: string
+      required:
+        - userId
+    PublicUserData:
+      type: object
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        displayName:
+          type: string
+        pfp:
+          type: string
+      required:
+        - userId
+        - username
+    GIF:
+      type: object
+      properties:
+        gifId:
+          type: string
+        url:
+          type: string
+        path:
+          type: string
+      required:
+        - gifId
+        - url
+        - path
+    PersonalUserData:
+      allOf:
+        - $ref: '#/components/schemas/PublicUserData'
+        - type: object
+          properties:
+            savedGifs:
+              type: array
+              items:
+                $ref: '#/components/schemas/GIF'
+            userId:
+              type: string
+            username:
+              type: string
+            displayName:
+              type: string
+            pfp:
+              type: string
+            pictureDiscovery:
+              type: boolean
+            passwordSet:
+              type: boolean
+            emailSet:
+              type: boolean
+            phoneSet:
+              type: boolean
+          required:
+            - savedGifs
+            - userId
+            - username
+            - displayName
+            - pfp
+            - pictureDiscovery
+            - passwordSet
+            - emailSet
+            - phoneSet
+    RegisterFcmTokenReq:
+      type: object
+      properties:
+        fcmToken:
+          type: string
+      required:
+        - fcmToken
+    RegisterApnsTokenReq:
+      type: object
+      properties:
+        apnsToken:
+          type: string
+      required:
+        - apnsToken
+    ChangeUsernameReq:
+      type: object
+      properties:
+        newUsername:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required,min=3,max=16,alphanum
+      required:
+        - newUsername
+    ChangeDisplayNameReq:
+      type: object
+      properties:
+        newDisplayName:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: min=3,max=20
+      required:
+        - newDisplayName
+    DeleteAccountReq:
+      type: object
+      properties:
+        password:
+          type: string
+      required:
+        - password
+    SessionV3:
+      type: object
+      properties:
+        frontend:
+          type: string
+        os:
+          type: string
+        signInAt:
+          type: string
+          format: date-time
+        sessionId:
+          type: string
+      required:
+        - frontend
+        - os
+        - sessionId
+        - signInAt
+    ToggleGifReq:
+      type: object
+      properties:
+        url:
+          type: string
+        saved:
+          type: boolean
+      required:
+        - url
+        - saved
+    S3PresignedFileReq:
+      type: object
+      properties:
+        fileSize:
+          type: integer
+        contentType:
+          type: string
+        fileName:
+          type: string
+          description: Optional, only used when sending messages. Other endpoints will ignore this field and use a generated file name.
+      required:
+        - fileSize
+        - contentType
+    S3PresignedFileResponse:
+      type: object
+      properties:
+        fileId:
+          type: string
+        url:
+          type: string
+          format: uri
+          example: https://cdn.chatenium.hu/chatenium
+        fields:
+          type: object
+          description: All these has to be appended to the form data
+          additionalProperties:
+            type: string
+          example:
+            fileId: 397271d5-1215-4dbd-b9da-2d8584c6adb1
+            bucket: chatenium
+            key: subdirectory/name.extension
+            Content-Type: image/png
+            x-amz-date: 20260602T140753Z
+            x-amz-algorithm: AWS4-HMAC-SHA256
+            x-amz-credential: chatenium/20260602/us-east-1/s3/aws4_request
+            policy: Base64 encoded policy
+            x-amz-signature: Signature
+      required:
+        - url
+        - fields
+        - fileId
+    CompletePfpUploadReq:
+      type: object
+      properties:
+        fileId:
+          type: string
+      required:
+        - fileId
+    GetAccessResp:
+      type: object
+      properties:
+        rtcConfig:
+          type: string
+          description: RTC configuration as a JSON string
+        liveKitToken:
+          type: string
+      required:
+        - rtcConfig
+        - liveKitToken
+    LatestMessage:
+      type: object
+      properties:
+        messageId:
+          type: string
+        message:
+          type: string
+        isAuthor:
+          type: boolean
+      required:
+        - messageId
+        - message
+        - isAuthor
+    Contact:
+      type: object
+      properties:
+        userid:
+          type: string
+        contactId:
+          type: string
+        displayName:
+          type: string
+        username:
+          type: string
+        pfp:
+          type: string
+        status:
+          type: integer
+        notification:
+          type: integer
+        muted:
+          type: boolean
+        latestMessage:
+          $ref: '#/components/schemas/LatestMessage'
+      required:
+        - userid
+        - contactId
+        - username
+        - status
+        - notification
+        - muted
+    AddContactReq:
+      type: object
+      properties:
+        partnerUsername:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required,min=3
+      required:
+        - partnerUsername
+    SetMuteReq:
+      type: object
+      properties:
+        muted:
+          type: boolean
+      required:
+        - muted
+    Attachment:
+      type: object
+      properties:
+        fileId:
+          type: string
+        name:
+          type: string
+        path:
+          type: string
+        height:
+          type: integer
+          format: int64
+        width:
+          type: integer
+          format: int64
+        mimeType:
+          type: string
+      required:
+        - fileId
+        - name
+        - path
+        - mimeType
+    Message:
+      type: object
+      properties:
+        messageId:
+          type: string
+        replyTo:
+          type: string
+        replyToContent:
+          type: string
+        content:
+          type: string
+        author:
+          $ref: '#/components/schemas/PublicUserData'
+        sentAt:
+          type: string
+          format: date-time
+        isEdited:
+          type: boolean
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+        seen:
+          type: boolean
+        forwardedFrom:
+          type: string
+      required:
+        - messageId
+        - author
+        - sentAt
+        - isEdited
+        - seen
+    SendMessageReq:
+      type: object
+      properties:
+        attachments:
+          type: array
+          items:
+            type: string
+        content:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: max=2000
+        replyingTo:
+          type: string
+    PinnedMessage:
+      type: object
+      properties:
+        messageId:
+          type: string
+        attachmentCount:
+          type: integer
+        content:
+          type: string
+      required:
+        - messageId
+        - attachmentCount
+    PinMessageReq:
+      type: object
+      properties:
+        messageId:
+          type: string
+      required:
+        - messageId
+    GetPositionResp:
+      type: object
+      properties:
+        position:
+          type: integer
+      required:
+        - position
+    EditMessageReq:
+      type: object
+      properties:
+        newContent:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: max=2000
+      required:
+        - newContent
+    S3PresignedMultiResp:
+      type: object
+      properties:
+        fileId:
+          type: string
+        uploadId:
+          type: string
+        urls:
+          type: array
+          items:
+            type: string
+      required:
+        - uploadId
+        - urls
+        - fileId
+    S3FinishMultiReq:
+      type: object
+      properties:
+        fileId:
+          type: string
+        parts:
+          type: array
+          items:
+            type: object
+            properties:
+              partNumber:
+                type: integer
+              eTag:
+                type: string
+            required:
+              - partNumber
+              - eTag
+      required:
+        - fileId
+        - parts
+    FileMetadata:
+      type: object
+      properties:
+        name:
+          type: string
+        fileId:
+          type: string
+        size:
+          type: integer
+      required:
+        - name
+        - fileId
+        - size
+    StartNewReq:
+      type: object
+      properties:
+        partnerId:
+          type: string
+        metadata:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileMetadata'
+      required:
+        - partnerId
+        - metadata
+    StartNewResp:
+      type: object
+      properties:
+        transferId:
+          type: string
+      required:
+        - transferId
+    RTCConfiguration:
+      type: object
+      properties:
+        configuration:
+          type: string
+          description: WebRTC Configuration encoded via JSON
+      required:
+        - configuration
+    RTCSendOfferReq:
+      type: object
+      properties:
+        offer:
+          type: string
+        partnerId:
+          type: string
+        transferId:
+          type: string
+      required:
+        - offer
+        - partnerId
+        - transferId
+    RTCSendAnswerReq:
+      type: object
+      properties:
+        answer:
+          type: string
+        partnerId:
+          type: string
+        transferId:
+          type: string
+      required:
+        - answer
+        - partnerId
+        - transferId
+    RTCSendCandidateReq:
+      type: object
+      properties:
+        candidate:
+          type: string
+        partnerId:
+          type: string
+        transferId:
+          type: string
+      required:
+        - candidate
+        - partnerId
+        - transferId
+    CompletePicUploadReq:
+      type: object
+      properties:
+        fileId:
+          type: string
+      required:
+        - fileId
+    Cascade:
+      type: object
+      properties:
+        cascadeId:
+          type: string
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required,min=3,max=16
+        visibility:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required,oneof=private public
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        picture:
+          type: string
+      required:
+        - cascadeId
+        - name
+        - description
+        - visibility
+        - createdBy
+        - createdAt
+        - picture
+    CreateCascadeReq:
+      type: object
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required,min=3,max=16
+        visibility:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required,oneof=private public
+      required:
+        - name
+        - description
+        - visibility
+    DetailedMemberList:
+      type: array
+      items:
+        type: object
+        properties:
+          rankId:
+            type: string
+          name:
+            type: string
+          color:
+            type: string
+          icon:
+            type: string
+            nullable: true
+          members:
+            type: array
+            items:
+              $ref: '#/components/schemas/PublicUserData'
+        required:
+          - rankId
+          - name
+          - color
+          - members
+    Ban:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PublicUserData'
+        - type: object
+          properties:
+            since:
+              type: string
+    DiscoveryCascade:
+      type: object
+      properties:
+        name:
+          type: string
+        picture:
+          type: string
+        memberCount:
+          type: integer
+        description:
+          type: string
+        createdBy:
+          type: string
+        cascadeId:
+          type: string
+        threadCount:
+          type: integer
+      required:
+        - name
+        - memberCount
+        - description
+        - createdBy
+        - cascadeId
+        - threadCount
+    JoinFromInviteReq:
+      type: object
+      properties:
+        invite:
+          type: string
+      required:
+        - invite
+    JoinPublicReq:
+      type: object
+      properties:
+        cascadeId:
+          type: string
+      required:
+        - cascadeId
+    EditNameReq:
+      type: object
+      properties:
+        newName:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required,min=3,max=16
+      required:
+        - newName
+    ChangeVisibility:
+      type: object
+      properties:
+        newVisibility:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required,oneof=private public
+      required:
+        - newVisibility
+    CascadeInvite:
+      type: object
+      properties:
+        inviteId:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        times:
+          type: integer
+        usedTimes:
+          type: integer
+        paused:
+          type: boolean
+      required:
+        - inviteId
+        - createdBy
+        - createdAt
+        - times
+        - usedTimes
+        - paused
+    CreateInviteReq:
+      type: object
+      properties:
+        times:
+          type: integer
+          minimum: 1
+      required:
+        - times
+    PauseInviteReq:
+      type: object
+      properties:
+        paused:
+          type: boolean
+      required:
+        - paused
+    Thread:
+      type: object
+      properties:
+        threadId:
+          type: string
+        parentId:
+          type: string
+        path:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        name:
+          type: string
+        desc:
+          type: string
+        hasChildren:
+          type: boolean
+      required:
+        - threadId
+        - path
+        - createdAt
+        - createdBy
+        - name
+        - desc
+        - hasChildren
+    StartNewThreadReq:
+      type: object
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required,min=3,max=16
+        desc:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: max=70
+        parentId:
+          type: string
+      required:
+        - name
+        - desc
+    ThreadMessageAttachment:
+      type: object
+      properties:
+        fileId:
+          type: string
+        name:
+          type: string
+        path:
+          type: string
+        height:
+          type: integer
+          format: int64
+        width:
+          type: integer
+          format: int64
+        mimeType:
+          type: string
+      required:
+        - fileId
+        - name
+        - path
+        - mimeType
+    ThreadMessage:
+      type: object
+      properties:
+        messageId:
+          type: string
+        replyTo:
+          type: string
+        replyToContent:
+          type: string
+        content:
+          type: string
+        author:
+          $ref: '#/components/schemas/PublicUserData'
+        sentAt:
+          type: string
+          format: date-time
+        isEdited:
+          type: boolean
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ThreadMessageAttachment'
+        seen:
+          type: boolean
+        forwardedFrom:
+          type: string
+      required:
+        - messageId
+        - author
+        - sentAt
+        - isEdited
+        - seen
+    TMSendMessageReq:
+      type: object
+      properties:
+        attachments:
+          type: array
+          items:
+            type: string
+        content:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: max=2000
+        replyingTo:
+          type: string
+    TMPinMessageReq:
+      type: object
+      properties:
+        messageId:
+          type: string
+      required:
+        - messageId
+    TMGetPositionResp:
+      type: object
+      properties:
+        position:
+          type: integer
+      required:
+        - position
+    TMEditMessageReq:
+      type: object
+      properties:
+        newContent:
+          type: string
+      required:
+        - newContent
+    RankCreateOrUpdateReq:
+      type: object
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required,min=3,max=16
+        color:
+          type: string
+          format: hexcolor
+          x-oapi-codegen-extra-tags:
+            validate: required,hexcolor
+      required:
+        - name
+        - color
+    Rank:
+      type: object
+      properties:
+        rankId:
+          type: string
+        color:
+          type: string
+          format: hexcolor
+        name:
+          type: string
+        permissions:
+          type: integer
+      required:
+        - rankId
+        - color
+        - name
+        - permissions
+    UpdateRankPermissionReq:
+      type: object
+      properties:
+        permissions:
+          type: integer
+      required:
+        - permissions
+    ManageRankAssignmentReq:
+      type: object
+      properties:
+        memberId:
+          type: string
+        assigned:
+          type: boolean
+      required:
+        - memberId
+        - assigned
+    UnOrFollowCreatorReq:
+      type: object
+      properties:
+        followed:
+          type: boolean
+      required:
+        - followed
+    Creator:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/PublicUserData'
+        - type: object
+          properties:
+            albumsCount:
+              type: integer
+            picturesCount:
+              type: integer
+          required:
+            - albumsCount
+            - picturesCount
+    ToggleDiscoveryParticipationReq:
+      type: object
+      properties:
+        participate:
+          type: boolean
+      required:
+        - participate
+    Picture:
+      type: object
+      properties:
+        pictureId:
+          type: string
+        path:
+          type: string
+        title:
+          type: string
+        uploadedAt:
+          type: string
+        blurHash:
+          type: string
+        liked:
+          type: boolean
+          description: Whether the user has liked the picture
+        likesCount:
+          type: integer
+        userData:
+          description: Only included when fetching pictures via discovery
+          $ref: '#/components/schemas/PublicUserData'
+      required:
+        - pictureId
+        - path
+        - title
+        - uploadedAt
+        - blurHash
+        - likesCount
+        - liked
+    UploadPicturesReq:
+      type: array
+      items:
+        type: object
+        properties:
+          title:
+            type: string
+            x-oapi-codegen-extra-tags:
+              validate: required,min=1,max=25
+          fileId:
+            type: string
+          visibility:
+            type: integer
+          albumId:
+            type: string
+        required:
+          - title
+          - fileId
+          - visibility
+    EditPictureReq:
+      type: object
+      properties:
+        title:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required,min=1,max=25
+        visibility:
+          type: integer
+      required:
+        - title
+        - visibility
+    LikePictureReq:
+      type: object
+      properties:
+        liked:
+          type: boolean
+      required:
+        - liked
+    DiscoveryResp:
+      type: object
+      properties:
+        mostLiked:
+          type: array
+          items:
+            $ref: '#/components/schemas/Picture'
+        recent:
+          type: array
+          items:
+            $ref: '#/components/schemas/Picture'
+      required:
+        - mostLiked
+        - recent
+    Comment:
+      type: object
+      properties:
+        commentId:
+          type: string
+        author:
+          type: string
+        username:
+          type: string
+        displayName:
+          type: string
+        pfp:
+          type: string
+        content:
+          type: string
+        commentedAt:
+          type: string
+          format: date-time
+      required:
+        - commentId
+        - author
+        - username
+        - content
+        - commentedAt
+    PostCommentReq:
+      type: object
+      properties:
+        content:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required,min=1,max=100
+      required:
+        - content
+    EditCommentReq:
+      type: object
+      properties:
+        content:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required,min=1,max=100
+      required:
+        - content
+    Preview:
+      type: object
+      properties:
+        path:
+          type: string
+        blurHash:
+          type: string
+      required:
+        - path
+        - blurHash
+    Album:
+      type: object
+      properties:
+        albumId:
+          type: string
+        visibility:
+          type: integer
+          enum:
+            - 0
+            - 1
+        createdAt:
+          type: string
+          format: date-time
+        name:
+          type: string
+        preview:
+          type: array
+          items:
+            $ref: '#/components/schemas/Preview'
+      required:
+        - albumId
+        - visibility
+        - createdAt
+        - name
+        - preview
+    CreateAlbumReq:
+      type: object
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required,min=1,max=20
+        visibility:
+          type: integer
+          enum:
+            - 0
+            - 1
+      required:
+        - name
+        - visibility
+    EditAlbumReq:
+      type: object
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required,min=1,max=20
+        visibility:
+          type: integer
+          enum:
+            - 0
+            - 1
+      required:
+        - name
+        - visibility
+  responses:
+    ErrorBody:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Validation failed
+        validation_errors:
+          type: object
+          additionalProperties:
+            type: string

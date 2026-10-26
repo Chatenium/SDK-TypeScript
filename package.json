@@ -1,0 +1,33 @@
+{
+  "name": "chatenium-sdk-typescript",
+  "version": "1.0.0",
+  "description": "A TypeScript SDK for interacting with Chatenium API",
+  "main": "index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "npx @openapitools/openapi-generator-cli generate -i openapi.yaml -g typescript-axios -o ./src/generated --skip-validate-spec --global-property apiDocs=false,modelDocs=false",
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.chatenium.hu/chatenium/SDK-TypeScript"
+  },
+  "author": "Noel",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "@openapitools/openapi-generator-cli": "^2.42.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "typescript": "^7.0.2"
+  }
+}
