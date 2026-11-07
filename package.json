@@ -1,6 +1,6 @@
 {
   "name": "chatenium-sdk-typescript",
-  "version": "1.0.0",
+  "version": "2.0.0-beta.1",
   "description": "A TypeScript SDK for interacting with Chatenium API",
   "main": "index.js",
   "types": "./dist/index.d.ts",
