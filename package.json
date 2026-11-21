@@ -1,6 +1,6 @@
 {
   "name": "chatenium-sdk-typescript",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0-preview.1",
   "description": "A TypeScript SDK for interacting with Chatenium API",
   "main": "index.js",
   "types": "./dist/index.d.ts",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://git.chatenium.hu/chatenium/SDK-TypeScript"
+    "url": "https://github.com/Chatenium/SDK-TypeScript"
   },
   "author": "Noel",
   "license": "GPL-3.0-or-later",
