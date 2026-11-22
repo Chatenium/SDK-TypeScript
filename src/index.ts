@@ -70,3 +70,6 @@ export class ChateniumClient {
         this.cascadeRanks = new RanksApi(this.apiConfig);
     }
 }
+
+export * from "./services/auth";
+export * from "./generated";

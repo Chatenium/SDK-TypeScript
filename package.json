@@ -1,6 +1,6 @@
 {
   "name": "@chatenium/chatenium-sdk",
-  "version": "2.0.0-preview.1",
+  "version": "2.0.0-preview.4",
   "description": "A TypeScript SDK for interacting with Chatenium API",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

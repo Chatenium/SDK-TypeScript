@@ -2765,6 +2765,8 @@ components:
         - minimumSteps
         - factorsTracker
       properties:
+        authIdentityToken:
+          type: string
         challengeId:
           type: string
           format: uuid
@@ -3059,6 +3061,14 @@ components:
           type: boolean
       required:
         - muted
+    MessageReplyTo:
+      type: object
+      properties:
+        messageId:
+          type: string
+        content:
+          type: string
+          nullable: true
     Attachment:
       type: object
       properties:
@@ -3087,7 +3097,7 @@ components:
         messageId:
           type: string
         replyTo:
-          type: string
+          $ref: '#/components/schemas/MessageReplyTo'
         replyToContent:
           type: string
         content:
@@ -3494,6 +3504,14 @@ components:
       required:
         - name
         - desc
+    ThreadMessageReplyTo:
+      type: object
+      properties:
+        messageId:
+          type: string
+        content:
+          type: string
+          nullable: true
     ThreadMessageAttachment:
       type: object
       properties:
@@ -3522,7 +3540,7 @@ components:
         messageId:
           type: string
         replyTo:
-          type: string
+          $ref: '#/components/schemas/ThreadMessageReplyTo'
         replyToContent:
           type: string
         content:
